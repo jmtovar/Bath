@@ -1,0 +1,25 @@
+{% block js %}
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"></script>
+{% endblock %}
+
+<p>Please provide your tree</p>
+<textarea type='text' id='input' cols='50' rows='5'></textarea>
+<br />
+{% if sources %}
+<p>Select the images source</p>
+<select id='source'>
+	{% for source in sources %}
+	<option value='{{ source }}'>{{source}}</option>
+	{% endfor %}
+</select>
+{% endif %}
+<button id='submit'>Submit</button>
+
+<script>
+$(document).ready(function(){
+	$("#submit").click(function(){
+		window.location = '/result/?{{ input }}=' + $("#input").val() + 
+							'&{{data}}=' + $('#source').val();
+	});
+});
+</script>

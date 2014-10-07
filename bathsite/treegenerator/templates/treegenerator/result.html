@@ -1,0 +1,14 @@
+{% if result %}
+    <ul>
+    {% for img in result %}
+		<p>Image from source: {{img}}</p>
+		<img src={{img}} />
+    {% endfor %}
+    </ul>
+{% else %}
+    <p>No animals selected</p>
+{% endif %}
+
+{% if data %}
+	<p>Source selected: {{data}}</p>
+{% endif %}
