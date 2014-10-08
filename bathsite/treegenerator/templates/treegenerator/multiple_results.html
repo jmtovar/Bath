@@ -1,0 +1,72 @@
+{% block js %}
+    <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"></script>
+{% endblock %}
+
+{% if result %}
+	<ul>
+    {% for elem in result %}
+		{% with species=elem.0 img_list=elem.1 %}
+			{% if img_list == no_data %}
+				<li>
+					<p style='color:red'>There was no data for species {{species}} in the data source {{data}}. Check your spelling.</p>
+				</li>
+			{% elif img_list == no_img %}
+				<li>
+					<p style='color:red'>The species {{species}} was found in the data source {{data}}, but there was no image for it</p>
+				</li>
+			{% elif img_list == error %}
+				<li>
+					<p style='color:red'>An unidentified error happened when looking for species {{species}} in data source {{data}}. Contact a system administrator</p>
+				</li>
+			{% else %}
+				{# if there was no error #}
+				<li>
+					<p>Images for species {{species}} from source: {{img}}</p>
+					<div class='imageViewer'>
+						<form class='imageSelector' id='form{{species}}'>
+							<table>
+								<tr>
+								{with first_iter=img_list.0}
+									{% for img in img_list %}
+										<td>
+											<input type="radio" name="img{{species}}" value='{{img}}'{% if first_iter == img %} checked>{% else %} > {% endif %}
+											<img src={{img}}></img>
+										</td>
+									{% endfor %}
+								
+								</tr>
+							</table>
+						</form>
+					</div>
+					<div>
+				</li>
+			{% endif %}
+		{% endwith %}
+    {% endfor %}
+    </ul>
+	
+	<center><button id='submit' text="I've selected the images I am interested in" /></center>
+{% else %}
+    <p>No animals selected</p>
+{% endif %}
+
+$(document).ready(function(){
+	$('.imageViewer').css('width', $(window).width())
+
+	$('#submit').click(function(){
+		
+		result_array = [
+		
+		{% for elem in result %}
+			{% with species=elem.0 img_list=elem.1 %}
+				{% if img_list == no_data %}{% elif img_list == no_img %}{% elif img_list == error %}{% else %}
+					$('input[name=img{{species}}]:checked', '#form{{species}}').val(),
+				{% endif %}
+			{% endwith %}
+		{% endfor %}
+		
+		 ]
+		 
+		alert(result_array);
+	});
+});

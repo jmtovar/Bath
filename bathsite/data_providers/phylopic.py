@@ -35,16 +35,46 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 						
 						inner_list = element['pngFiles']
 						for inner_element in inner_list:
-							return 'http://phylopic.org/' + inner_element['url']
+							return 'http://phylopic.org' + unicodedata.normalize('NFKD', inner_element['url']).encode('ascii', 'ignore')
 					
 				else:
 					return constants.ERROR
 	
 	def get_all_images(self, species):
 		#returns a list of all the urls for the species found in the source
-		json = get_species_uid(species)
+		json_uid = self.get_species_uid(species)
 		
-		return
+		if json_uid == None:
+			return constants.NO_SPECIES_BY_PROVIDED_NAME
+		else:
+			list = json_uid['result']
+			uid_list = []
+			for element in list:
+				if element['illustrated']:
+					#for some reason the uid comes in unicode type instead of str,
+					#so a conversion is needed
+					uid = element['canonicalName']['uid']
+					uid = unicodedata.normalize('NFKD', uid).encode('ascii', 'ignore')
+					uid_list.append(uid)
+					
+			if len(uid_list) == 0:
+				return constants.NO_IMAGES_FOR_SPECIES
+			else:
+				img_list = []
+				
+				for uid in uid_list:
+					url = 'http://phylopic.org/api/a/name/' + uid + '/images?options=pngFiles'
+					json_img = json.load(urllib2.urlopen(url))
+					
+					if json_img['success']:
+						list = json_img['result']['same']
+						for element in list:
+							
+							inner_list = element['pngFiles']
+							for inner_element in inner_list:
+								img_list.append('http://phylopic.org' + unicodedata.normalize('NFKD', inner_element['url']).encode('ascii', 'ignore'))
+				
+				return img_list;
 		
 	def get_species_uid(self, species):
 		length = len(species)
@@ -54,7 +84,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 		print url
 		json_uid = json.load(urllib2.urlopen(url))
 		
-		if json_uid['success']:
+		if json_uid['success'] and not(len(json_uid['result']) == 0):
 			return json_uid
 		else:
 			return None 

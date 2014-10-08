@@ -4,6 +4,9 @@ class EncyclopediaOfLifePluggin(data_pluggin.DataPluggin):
 	
 	def get_first_image(self, species):
 		#returns the url of the first image of the species found in the source
+		
+		
+		url = 'http://eol.org/api/data_objects/1.0/' + + '.json'
 		return
 	
 	def get_all_images(self, species):

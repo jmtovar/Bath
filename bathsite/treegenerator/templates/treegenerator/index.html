@@ -13,13 +13,34 @@
 	{% endfor %}
 </select>
 {% endif %}
+
+<form id='myForm'>
+	<input type="radio" name="behaviour" value='{{system_chooses}}' checked>Choose default image for each species<br>
+	<input type="radio" name="behaviour" value='{{user_chooses}}'>Let me choose the image for each species
+</form> 
+
 <button id='submit'>Submit</button>
 
 <script>
 $(document).ready(function(){
 	$("#submit").click(function(){
-		window.location = '/result/?{{ input }}=' + $("#input").val() + 
-							'&{{data}}=' + $('#source').val();
+		var treeInput = $('#source').val();
+		
+		if(treeInput == ''){
+			alert('You have not provided input data. Please do so.');
+		}
+		else{
+			if($('input[name=behaviour]:checked', '#myForm').val() == '{{system_chooses}}'){
+				alert('Going to default page')
+				window.location = '/result/?{{ input }}=' + $("#input").val() + 
+									'&{{data}}=' + $('#source').val();
+			}
+			else{
+				alert('Going to non default page')
+				window.location = '/multiple_results/?{{ input }}=' + $("#input").val() + 
+									'&{{data}}=' + $('#source').val();
+			}
+		}
 	});
 });
 </script>
