@@ -2,6 +2,29 @@
     <script src="http://ajax.aspnetcdn.com/ajax/jQuery/jquery-1.11.1.min.js"></script>
 {% endblock %}
 
+{% if errors %}
+	<h3>The following issues were detected on your query</h3>
+	<ul>
+	{% for err in errors %}
+		{% with species=err.0 img=err.1 %}
+			{% if img == no_data %}
+				<li>
+					<p style='color:red'>There was no data for species {{species}} in the data source {{data_source}}. Check your spelling.</p>
+				</li>
+			{% elif img == no_img %}
+				<li>
+					<p style='color:red'>The species {{species}} was found in the data source {{data_source}}, but there was no image for it</p>
+				</li>
+			{% elif img == error %}
+				<li>
+					<p style='color:red'>An unidentified error happened when looking for species {{species}} in data source {{data_source}}. Contact a system administrator</p>
+				</li>
+			{% endif %}
+		{% endwith %}
+	{% endfor %}
+	</ul>
+{% endif %}
+
 <p>Please provide your tree</p>
 <textarea type='text' id='input' cols='50' rows='5'></textarea>
 <br />
@@ -23,6 +46,11 @@
 
 <script>
 $(document).ready(function(){
+
+	{% if user_tree %}
+		$('#input').text('{{user_tree}}')
+	{% endif %}
+
 	$("#submit").click(function(){
 		var treeInput = $('#source').val();
 		
@@ -31,12 +59,10 @@ $(document).ready(function(){
 		}
 		else{
 			if($('input[name=behaviour]:checked', '#myForm').val() == '{{system_chooses}}'){
-				alert('Going to default page')
 				window.location = '/result/?{{ input }}=' + $("#input").val() + 
 									'&{{data}}=' + $('#source').val();
 			}
 			else{
-				alert('Going to non default page')
 				window.location = '/multiple_results/?{{ input }}=' + $("#input").val() + 
 									'&{{data}}=' + $('#source').val();
 			}

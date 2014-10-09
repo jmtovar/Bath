@@ -2,25 +2,10 @@
 	<ul>
     {% for elem in result %}
 		{% with species=elem.0 img=elem.1 %}
-			{% if img == no_data %}
-				<li>
-					<p style='color:red'>There was no data for species {{species}} in the data source {{data}}. Check your spelling.</p>
-				</li>
-			{% elif img == no_img %}
-				<li>
-					<p style='color:red'>The species {{species}} was found in the data source {{data}}, but there was no image for it</p>
-				</li>
-			{% elif img == error %}
-				<li>
-					<p style='color:red'>An unidentified error happened when looking for species {{species}} in data source {{data}}. Contact a system administrator</p>
-				</li>
-			{% else %}
-				{# if there was no error #}
-				<li>
-					<p>Image for species {{species}} from source: {{img}}</p>
-					<img src={{img}} />
-				</li>
-			{% endif %}
+			<li>
+				<p>Image for species {{species}} from source: {{img}}</p>
+				<img src={{img}} />
+			</li>
 		{% endwith %}
     {% endfor %}
     </ul>

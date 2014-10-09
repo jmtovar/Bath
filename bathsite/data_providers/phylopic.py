@@ -61,6 +61,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 				return constants.NO_IMAGES_FOR_SPECIES
 			else:
 				img_list = []
+				img_ids = {}
 				
 				for uid in uid_list:
 					url = 'http://phylopic.org/api/a/name/' + uid + '/images?options=pngFiles'
@@ -71,8 +72,29 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 						for element in list:
 							
 							inner_list = element['pngFiles']
-							for inner_element in inner_list:
-								img_list.append('http://phylopic.org' + unicodedata.normalize('NFKD', inner_element['url']).encode('ascii', 'ignore'))
+							
+							#Phylopic has (as far as I have experimented) 5 resolution sizes for every image, which are enumerated
+							#consecutivly. The format is the same for the 5 images <image_id>.<size>.png
+							#This loop eliminates the repeated images, leaving only the largest one
+							
+							for elem in inner_list:
+								img = unicodedata.normalize('NFKD', elem['url']).encode('ascii', 'ignore')
+								img_key = img.split('.')[0]
+								try:
+									img_size = int(float(img.split('.')[1]))
+								
+									if img_ids.has_key(img_key):
+										if img_ids[img_key] < img_size:
+											img_ids[img_key] = img_size
+									else:
+										img_ids[img_key] = img_size
+								except:
+									continue
+							
+							print img_ids
+							
+				for k, v in img_ids.items():
+					img_list.append('http://phylopic.org' + k + '.' + str(v) + '.png')
 				
 				return img_list;
 		
