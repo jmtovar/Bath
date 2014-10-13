@@ -4,6 +4,7 @@ from django.template import RequestContext, loader
 from utils import constants
 from data_providers import pluggin_factory
 from biowrapper.phylogeny import NewickTree
+from Bio.Phylo.NewickIO import NewickError
 
 def index(request):
     context = {'input': constants.INPUT, 
@@ -22,7 +23,10 @@ def result(request):
         data_source = pluggin_factory.DEFAULT
 
     #Parses and should validate the tree. Will also have more functions if needed.
-    nTree = NewickTree(input)
+    try :
+        nTree = NewickTree(input)
+    except NewickError as e :
+        return HttpResponse("There is a problem with the structure of the Newick tree.")
     #need tree parsing here
     #for now, I am only extracting all the names of the species from the tree
     input_array = nTree.getSpeciesNames() 
