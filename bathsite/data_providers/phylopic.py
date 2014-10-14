@@ -91,19 +91,15 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 								except:
 									continue
 							
-							print img_ids
-							
 				for k, v in img_ids.items():
 					img_list.append('http://phylopic.org' + k + '.' + str(v) + '.png')
 				
 				return img_list;
 		
 	def get_species_uid(self, species):
-		length = len(species)
 		buffer = species.replace(' ', '+')
 				
 		url = 'http://phylopic.org/api/a/name/search?text=' + buffer + '&options=illustrated';
-		print url
 		json_uid = json.load(urllib2.urlopen(url))
 		
 		if json_uid['success'] and not(len(json_uid['result']) == 0):
