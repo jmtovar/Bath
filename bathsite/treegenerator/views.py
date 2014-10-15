@@ -4,6 +4,8 @@ from django.template import RequestContext, loader
 from utils import constants
 from data_providers import pluggin_factory
 import unicodedata
+from biowrapper.phylogeny import NewickTree
+from Bio.Phylo.NewickIO import NewickError
 
 def index(request):
 	context = {'input': constants.INPUT, 
@@ -75,9 +77,14 @@ def argument_validation(request):
 	#change from unicode to ascii
 	input = unicodedata.normalize('NFKD', input).encode('ascii', 'ignore')
 	
-	#need tree parsing here
-	#for now, I am only extracting all the names of the species from the tree
-	input_array = input.replace('(', '').replace(')', '').split(',')
+	#Parses and should validate the tree. Will also have more functions if needed.
+    try :
+        nTree = NewickTree(input)
+    except NewickError as e :
+        return HttpResponse("There is a problem with the structure of the Newick tree.")
+    #need tree parsing here
+    #for now, I am only extracting all the names of the species from the tree
+    input_array = nTree.getSpeciesNames() 
 	
 	i = 0
 	while i < len(input_array):
