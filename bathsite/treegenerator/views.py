@@ -82,8 +82,6 @@ def argument_validation(request):
         nTree = NewickTree(input)
     except NewickError as e :
         return HttpResponse("There is a problem with the structure of the Newick tree.")
-    #need tree parsing here
-    #for now, I am only extracting all the names of the species from the tree
     input_array = nTree.getSpeciesNames() 
     
     i = 0
