@@ -82,13 +82,8 @@ def argument_validation(request):
         nTree = NewickTree(input)
     except NewickError as e :
         return HttpResponse("There is a problem with the structure of the Newick tree.")
-    input_array = nTree.getSpeciesNames() 
+    input_array = [name.strip() for name in nTree.getSpeciesNames()]
     
-    i = 0
-    while i < len(input_array):
-        input_array[i] = input_array[i].strip()
-        i = i + 1
-        
     data_source = request.GET.get(constants.DATA_SOURCE, '')
     if data_source == '':
         return (None, HttpResponse('There was an error with your request. Go back to the index page and try again'))
