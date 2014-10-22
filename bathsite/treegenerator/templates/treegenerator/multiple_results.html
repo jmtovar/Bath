@@ -5,18 +5,18 @@
 {% if result %}
 	<ul>
     {% for elem in result %}
-		{% with species=elem.0 img_list=elem.1 %}	
+		{% with species=elem.0 species_join=elem.1 img_list=elem.2 %}	
 			<li>
-				<p>Images for species {{species}} from source: {{img}}</p>
+				<p>Images for species {{species}}</p>
 				<div class='imageViewer' style='width:1000px;height:170px;overflow-x:scroll;'>
 					<div>
-						<form class='imageSelector' id='form{{species}}'>
+						<form class='imageSelector' id='form{{species_join}}'>
 							<table>
 								<tr>
 								{% with first_iter=img_list.0 %}
 									{% for img in img_list %}
 										<td>
-											<input type="radio" name="img{{species}}" value='{{img}}'{% if first_iter == img %} checked>{% else %} > {% endif %}
+											<input type="radio" name="img{{species_join}}" value='{{img}}'{% if first_iter == img %} checked>{% else %} > {% endif %}
 											<img src={{img}} style='height:100px'></img>
 										</td>
 									{% endfor %}
@@ -35,6 +35,9 @@
 	<center>
 		<button id='submit'>I've selected the images I am interested in</button>
 	</center>
+    {% if data %}
+	<p>Source selected: {{data}}</p>
+    {% endif %}
 {% else %}
     <p>No animals selected</p>
 {% endif %}
@@ -47,9 +50,9 @@
 			result_array = [
 			
 			{% for elem in result %}
-				{% with species=elem.0 img_list=elem.1 %}
+				{% with species_join=elem.1 img_list=elem.2 %}
 					{% if img_list == no_data %}{% elif img_list == no_img %}{% elif img_list == error %}{% else %}
-						$('input[name="img{{species}}"]:checked', '#form{{species}}').val(),
+						$('input[name="img{{species_join}}"]:checked', '#form{{species_join}}').val(),
 					{% endif %}
 				{% endwith %}
 			{% endfor %}
