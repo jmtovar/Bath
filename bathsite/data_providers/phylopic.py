@@ -35,7 +35,13 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
 						
 						inner_list = element['pngFiles']
 						for inner_element in inner_list:
-							return 'http://phylopic.org' + unicodedata.normalize('NFKD', inner_element['url']).encode('ascii', 'ignore')
+							#for each image there are always versions in different sizes (64, 128, 256, 512 and 1024).
+							#The first enumerated image is always the size 64 version, so we just replace the image version before the return
+							return 'http://phylopic.org' + unicodedata.normalize('NFKD', inner_element['url']).encode('ascii', 'ignore').replace('.64.png', '.1024.png')
+						
+						return constants.NO_IMAGES_FOR_SPECIES
+					
+					return constants.NO_IMAGES_FOR_SPECIES
 					
 				else:
 					return constants.ERROR
