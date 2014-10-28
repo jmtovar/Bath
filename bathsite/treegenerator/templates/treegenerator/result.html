@@ -4,9 +4,9 @@
 	{% for species, img in result.items %}
 		<li>
 			<p>Image for species {{species}} from source: {{img}}</p>
-			<img width='350px' src={{img}} />
+			<img src={{img}} alt="{{species}}"/>
 		</li>
-	{% endwith %}
+	{% endfor %}
 
     </ul>
 {% else %}
