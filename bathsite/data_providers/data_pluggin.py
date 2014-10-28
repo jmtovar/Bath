@@ -3,23 +3,13 @@ import threading
 
 class DataPluggin(object):
     __metaclass__=abc.ABCMeta
-    
-    img_list = []
-    err_list = []
+
+    def __init__(self):
+        self.img_list = dict()
+        self.err_list = dict()
     
     def get_first_image(self, species):
-        length = len(species)
-        
-        self.img_list = [(str(), str()) for i in range(length)]
-        self.err_list = [(str(), str()) for i in range(length)]
-        threads = [threading.Thread() for i in range(length)]
-        
-        for i in range(length):
-            threads[i].target=self.get_first_image_specific_implementation(species[i], i)
-            threads[i].start()
-        
-        for i in range(length):
-            threads[i].join()
+        self.get_first_image_specific_implementation(species)
     
     @abc.abstractmethod
     def get_first_image_specific_implementation(self, species):
@@ -27,18 +17,7 @@ class DataPluggin(object):
         return
     
     def get_all_images(self, species):
-        length = len(species)
-        
-        self.img_list = [(str(), str(), []) for i in range(length)]
-        self.err_list = [(str(), str()) for i in range(length)]
-        threads = [threading.Thread() for i in range(length)]
-        
-        for i in range(length):
-            threads[i].target=self.get_all_images_specific_implementation(species[i], i)
-            threads[i].start()
-        
-        for i in range(length):
-            threads[i].join()
+        self.get_first_image_specific_implementation(species, self.img_list, self.err_list)
     
     @abc.abstractmethod
     def get_all_images_specific_implementation(self, species):

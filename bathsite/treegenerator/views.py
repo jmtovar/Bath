@@ -67,8 +67,8 @@ def argument_validation(request):
 def redirection(error_list, img_list, data_source, request, no_errors_page):
     errors_present = False
     
-    for (s1, s2) in error_list:
-        if s1 != str() or s2 != str():
+    for species in  error_list.keys():
+        if not error_list[species] is None :
             errors_present = True
             break
     
@@ -90,6 +90,7 @@ def redirection(error_list, img_list, data_source, request, no_errors_page):
         return render(request, 'treegenerator/index.html', context)
     else:    
         print 'No present errors'
-        context = {'result':    img_list,
+
+        context = {'result':    img_list.values(),
                     'data':        data_source}
         return render(request, no_errors_page , context)
