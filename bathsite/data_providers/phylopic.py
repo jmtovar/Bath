@@ -8,12 +8,13 @@ import threading
 import Queue
 
 class PhylopicPluggin(data_pluggin.DataPluggin):
+    #TODO constructor
     
     def get_first_image_specific_implementation(self, species):
         #returns the url of the first image of the species found in the source
         lock = threading.Lock()
         queue = Queue.Queue()
-        threadNumber = 10
+        threadNumber = min(10, len(species))
 
         for i in range(threadNumber) :
             t = GetImageThread(self.img_list, self.err_list, lock, queue, i)
@@ -24,10 +25,9 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
         for sp in species :
             queue.put(sp)
         queue.join()
-
-
     
     def get_all_images_specific_implementation(self, species, index):
+        #TODO move to threads like other method
         #returns a list of all the urls for the species found in the source
         json_uid = self.get_species_uid(species)
         
@@ -119,6 +119,7 @@ class GetImageThread(threading.Thread):
             self.lock.acquire()
             if not species in self.images : # Species was not processed before.
                 self.lock.release()
+                print("Starting process for {}".format(species))
                 try :
                     url = None
                     image_url = None
@@ -180,7 +181,7 @@ class GetImageThread(threading.Thread):
                                 self.queue.task_done()
                                 continue # To the main while
                             else :
-                                print "Endind task, success"
+                                print("Endind task, success {}".format(species))
                                 with self.lock:
                                     self.errors[species] = None
                                     self.images[species] = image_url
