@@ -22,7 +22,6 @@ def result(request):
     if input_array == None:
         return data_source
     
-    #I need to make parallel requests for every element in the input array with a data source
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     data_pluggin.get_first_image(input_array)
     
@@ -56,7 +55,7 @@ def argument_validation(request):
         nTree = NewickTree(input)
     except NewickError as e :
         return (None, HttpResponse("There is a problem with the structure of the Newick tree."))
-    input_array = [name.strip() for name in nTree.getSpeciesNames()]
+    input_array = [name.strip().replace('_', ' ') for name in nTree.getSpeciesNames()]
     
     data_source = request.GET.get(constants.DATA_SOURCE, '')
     if data_source == '':
@@ -91,6 +90,6 @@ def redirection(error_list, img_list, data_source, request, no_errors_page):
     else:    
         print 'No present errors'
 
-        context = {'result':    img_list.values(),
+        context = {'result':    img_list,
                     'data':        data_source}
         return render(request, no_errors_page , context)
