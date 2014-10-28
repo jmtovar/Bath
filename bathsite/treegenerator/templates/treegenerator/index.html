@@ -15,7 +15,15 @@
 				<li>
 					<p style='color:red'>The species {{species}} was found in the data source {{data_source}}, but there was no image for it</p>
 				</li>
-			{% elif img == error %}
+            {% elif img == connection_error %}
+                <li>
+					<p style='color:red'>There was an error with the datasource connection. Please try again later</p>
+				</li>
+            {% elif img == json_error %}
+                <li>
+					<p style='color:red'>There was an error with the datasource response's format. Please contact a system administrator</p>
+				</li>
+            {% elif img == error %}
 				<li>
 					<p style='color:red'>An unidentified error happened when looking for species {{species}} in data source {{data_source}}. Contact a system administrator</p>
 				</li>
