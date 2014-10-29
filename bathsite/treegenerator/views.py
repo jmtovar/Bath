@@ -24,7 +24,11 @@ def result(request):
         return data_source
     
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
-    data_pluggin.get_first_image(input_array)
+    cache = CacheController()
+    cachedSpecies, input_array = cache.tryCache(input_array, data_source)
+    data_pluggin.get_all_images(input_array)
+    cache.storeCache(data_pluggin.img_list, data_source)
+    data_pluggin.img_list.update(cachedSpecies)
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, data_source, request, 'treegenerator/result.html')
 
