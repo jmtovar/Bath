@@ -21,7 +21,7 @@ class Request_Species(models.Model):
 	species = models.ForeignKey(Species)
 
 class CachedURL(models.Model):
-    species = models.CharField(max_length = 300)
-    database = models.CharField(max_length = 100)
+    species = models.CharField(max_length = 300, db_index=True)
+    database = models.CharField(max_length = 100, db_index=True)
     url = models.CharField(max_length = 500)
-    date = models.DateTimeField(default=timezone.now)
+    date = models.DateTimeField(default=timezone.now, db_index=True)
