@@ -1,6 +1,6 @@
 from django.db import models
 from datetime import datetime
-from time import timezone
+from django.utils import timezone
 
 
 class Request(models.Model):
@@ -24,4 +24,4 @@ class CachedURL(models.Model):
     species = models.CharField(max_length = 300)
     database = models.CharField(max_length = 100)
     url = models.CharField(max_length = 500)
-    date = models.DateTimeField(default=datetime.now)
+    date = models.DateTimeField(default=timezone.now)
