@@ -6,6 +6,7 @@ from data_providers import pluggin_factory
 import unicodedata
 from biowrapper.phylogeny import NewickTree
 from Bio.Phylo.NewickIO import NewickError
+from data_providers.cache import CacheController
 
 def index(request):
     context = {'input': constants.INPUT, 
@@ -38,7 +39,10 @@ def pick_results(request):
     
     #I need to make parallel requests for every element in the input array with a data source
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
+    cache = CacheController()
+    cachedSpecies, input_array = cache.tryCache(input_array, data_source)
     data_pluggin.get_all_images(input_array)
+    cache.storeCache(data_pluggin.img_list, data_source)
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, data_source, request, 'treegenerator/multiple_results.html')
     
