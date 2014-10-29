@@ -1,13 +1,13 @@
 {% if result %}
 	<ul>
-    {% for elem in result %}
-		{% with species=elem.0 img=elem.1 %}
-			<li>
-				<p>Image for species {{species}} from source: {{img}}</p>
-				<img width='350px' src={{img}} />
-			</li>
-		{% endwith %}
-    {% endfor %}
+
+	{% for species, img in result.items %}
+		<li>
+			<p>Image for species {{species}} from source: {{img}}</p>
+			<img src={{img}} alt="{{species}}"/>
+		</li>
+	{% endfor %}
+
     </ul>
 {% else %}
     <p>No animals selected</p>

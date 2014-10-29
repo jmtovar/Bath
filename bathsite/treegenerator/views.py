@@ -22,11 +22,10 @@ def result(request):
     if input_array == None:
         return data_source
     
-    #I need to make parallel requests for every element in the input array with a data source
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     data_pluggin.get_first_image(input_array)
     
-    return redirection(data_pluggin.err_list, data_pluggin.img_list, data_source, request, 'treegenerator/result.html')
+    return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/result.html')
 
 def pick_results(request):
     (input_array, data_source) = argument_validation(request)
@@ -38,7 +37,7 @@ def pick_results(request):
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     data_pluggin.get_all_images(input_array)
     
-    return redirection(data_pluggin.err_list, data_pluggin.img_list, data_source, request, 'treegenerator/multiple_results.html')
+    return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
     
 def argument_validation(request):
     input = request.GET.get(constants.INPUT, '')
@@ -53,7 +52,7 @@ def argument_validation(request):
         nTree = NewickTree(input)
     except NewickError as e :
         return (None, HttpResponse("There is a problem with the structure of the Newick tree."))
-    input_array = [name.strip() for name in nTree.getSpeciesNames()]
+    input_array = [name.strip().replace('_', ' ') for name in nTree.getSpeciesNames()]
     
     data_source = request.GET.get(constants.DATA_SOURCE, '')
     if data_source == '':
@@ -61,15 +60,19 @@ def argument_validation(request):
     
     return (input_array, data_source)
     
-def redirection(error_list, img_list, data_source, request, no_errors_page):
+def redirection(error_list, img_list, species_list, data_source, request, no_errors_page):
     errors_present = False
     
-    for (s1, s2) in error_list:
-        if s1 != str() or s2 != str():
+    for species in  error_list.keys():
+        if not error_list[species] is None :
             errors_present = True
             break
     
     if errors_present:
+        input_number = len(error_list)
+        for i in range(input_number):
+            error_list[i] = (species_list[i], error_list[i])
+    
         context = {'input':             constants.INPUT, 
                 'data':                 constants.DATA_SOURCE,
                 'sources':             [constants.PHYLOPIC, 
@@ -86,7 +89,11 @@ def redirection(error_list, img_list, data_source, request, no_errors_page):
                 'user_tree':            request.GET.get(constants.INPUT, '')}
                 
         return render(request, 'treegenerator/index.html', context)
-    else:    
-        context = {'result':    img_list,
-                    'data':        data_source}
+    else:
+        input_number = len(img_list)
+        for i in range(input_number):
+            img_list[i] = (species_list[i], img_list[i])
+            
+        context = {'result':        img_list,
+                    'data':         data_source}
         return render(request, no_errors_page , context)
