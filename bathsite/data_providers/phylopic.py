@@ -87,8 +87,18 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
                 return
 
 class GetImageThread(threading.Thread):
+    """
+    Thread model to process the species.
+    """
 
     def __init__(self, images, errors, lock, queue, id=0):
+        """
+        :param images: Dictionary for the species->urls.
+        :param errors: Dictionary for the species->errors.
+        :param lock: Lock to access the dictionaries in the threads.
+        :param queue: Queue with the species to be processed.
+        :param id: id of the thread in the thread group.
+        """
         threading.Thread.__init__(self)
         self.images = images
         self.errors = errors
@@ -97,6 +107,10 @@ class GetImageThread(threading.Thread):
         self.id = id
 
     def get_species_uid(self, species):
+        """ Gets the uid for the species from phylopic using the taxon search.
+        :param species: Name of the species.
+        :return: uid for the species in phylopic.
+        """
         buffer = species.replace(' ', '+')
 
         url = 'http://phylopic.org/api/a/name/search?text=' + buffer + '&options=illustrated';
@@ -111,8 +125,8 @@ class GetImageThread(threading.Thread):
 
     def run(self):
         """
-
-        :return:
+        Process the queue and get one image per species. Results are modified directly on the dictionaries provided in
+        the thread constructor.
         """
         while True:
             species = self.queue.get()
@@ -120,6 +134,8 @@ class GetImageThread(threading.Thread):
             if not species in self.images : # Species was not processed before.
                 self.lock.release()
                 print("Starting process for {}".format(species))
+                #We need this try to be sure the thread will not die in case of erros while getting data from
+                #phylopic
                 try :
                     url = None
                     image_url = None
