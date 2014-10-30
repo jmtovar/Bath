@@ -8,7 +8,8 @@ import threading
 import Queue
 
 class PhylopicPluggin(data_pluggin.DataPluggin):
-    #TODO constructor
+    def __init__(self):
+        super(PhylopicPluggin, self).__init__()
     
     def get_first_image_specific_implementation(self, species):
         #returns the url of the first image of the species found in the source
