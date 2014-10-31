@@ -80,24 +80,23 @@ def redirection(error_list, img_list, data_source, request, no_errors_page):
             break
     
     if errors_present:
-        print 'Errors present'
-        context = {'input':            constants.INPUT, 
-                'data':             constants.DATA_SOURCE,
+        context = {'input':             constants.INPUT, 
+                'data':                 constants.DATA_SOURCE,
                 'sources':             [constants.PHYLOPIC, 
                                         constants.ENCYCLOPEDIA_OF_LIFE],
-                'system_chooses':     constants.SYSTEM_CHOOSES,
-                'user_chooses':     constants.USER_CHOOSES,
-                'errors':             error_list,
-                'data_source':        data_source,
-                'no_data':            constants.NO_SPECIES_BY_PROVIDED_NAME,
-                'no_img':             constants.NO_IMAGES_FOR_SPECIES,
-                'error':             constants.ERROR,
-                'user_tree':        request.GET.get(constants.INPUT, '')}
+                'system_chooses':       constants.SYSTEM_CHOOSES,
+                'user_chooses':         constants.USER_CHOOSES,
+                'errors':               error_list,
+                'data_source':          data_source,
+                'no_data':              constants.NO_SPECIES_BY_PROVIDED_NAME,
+                'no_img':               constants.NO_IMAGES_FOR_SPECIES,
+                'connection_error':     constants.CONNECTION_ERROR,
+                'json_error':           constants.JSON_ERROR,
+                'error':                constants.ERROR,
+                'user_tree':            request.GET.get(constants.INPUT, '')}
                 
         return render(request, 'treegenerator/index.html', context)
     else:    
-        print 'No present errors'
-
         context = {'result':    img_list,
                     'data':        data_source}
         return render(request, no_errors_page , context)

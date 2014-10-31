@@ -1,4 +1,3 @@
-from numpy.lib.type_check import imag
 from data_providers import data_pluggin
 from utils import constants
 import urllib2
@@ -11,7 +10,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
     def __init__(self):
         super(PhylopicPluggin, self).__init__()
     
-    def get_first_image_specific_implementation(self, species):
+    def get_first_image_specific_implementation(self, species, index):
         #returns the url of the first image of the species found in the source
         lock = threading.Lock()
         queue = Queue.Queue()
@@ -30,10 +29,10 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
     def get_all_images_specific_implementation(self, species, index):
         #TODO move to threads like other method
         #returns a list of all the urls for the species found in the source
-        json_uid = self.get_species_uid(species)
+        (return_status, json_uid) = self.get_species_uid(species)
         
-        if json_uid == None:
-            self.err_list[index] = (species, constants.NO_SPECIES_BY_PROVIDED_NAME)
+        if not(return_status):
+            self.err_list[index] = (species, json_uid)
             return
         else:
             list = json_uid['result']
@@ -55,7 +54,23 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
                 
                 for uid in uid_list:
                     url = 'http://phylopic.org/api/a/name/' + uid + '/images?options=pngFiles'
-                    json_img = json.load(urllib2.urlopen(url))
+                    json_img = ''
+                    
+                    i = 0
+                    #Se intenta completar 3 veces la conexion
+                    while True:
+                        try:
+                            json_img = json.load(urllib2.urlopen(url))
+                            break
+                        except URLError:
+                            if i < 3:
+                                i = i + 1
+                            else:
+                                self.err_list[index] = (species, constants.CONNECTION_ERROR)
+                                return 
+                        except:
+                            self.err_list[index] = (species, constants.JSON_ERROR)
+                            return
                     
                     if json_img['success']:
                         list = json_img['result']['same']
@@ -172,6 +187,7 @@ class GetImageThread(threading.Thread):
                         else:
                             for uid in uids :
                                 url = 'http://phylopic.org/api/a/name/' + uid + '/images?options=pngFiles'
+                                #TODO Try 3 times for connection
                                 json_img = json.load(urllib2.urlopen(url))
 
                                 if json_img.has_key('success') and json_img['success'] == True:
