@@ -11,7 +11,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
     def __init__(self):
         super(PhylopicPluggin, self).__init__()
     
-    def get_first_image_specific_implementation(self, species, index):
+    def get_first_image_specific_implementation(self, species):
         #returns the url of the first image of the species found in the source
         lock = threading.Lock()
         queue = Queue.Queue()
@@ -64,7 +64,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
                             json_img = json.load(urllib2.urlopen(url))
                             break
                         except URLError:
-                            if i < 3:
+                            if i < constants.MAX_HTTP_TRY:
                                 i = i + 1
                             else:
                                 self.err_list[index] = (species, constants.CONNECTION_ERROR)
