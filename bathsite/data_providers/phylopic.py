@@ -5,6 +5,7 @@ import json
 import unicodedata
 import threading
 import Queue
+from urllib2 import URLError
 
 class PhylopicPluggin(data_pluggin.DataPluggin):
     def __init__(self):

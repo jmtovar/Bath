@@ -1,6 +1,7 @@
 from data_providers import data_pluggin
 from utils import constants
 import urllib2
+from urllib2 import URLError
 import json
 
 class EncyclopediaOfLifePluggin(data_pluggin.DataPluggin):
