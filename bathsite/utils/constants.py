@@ -1,8 +1,8 @@
-        """
-        Parse the tree from the string and return a Tree object.
-        :param treeString: String with the tree in Newick format.
-        :return: Bio.Phylo.Newick.Tree object with the resulting tree.
-        """
+"""
+Parse the tree from the string and return a Tree object.
+:param treeString: String with the tree in Newick format.
+:return: Bio.Phylo.Newick.Tree object with the resulting tree.
+"""
 
 INPUT = 'input'
 DATA_SOURCE = 'data_source'

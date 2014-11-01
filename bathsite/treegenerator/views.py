@@ -6,6 +6,7 @@ from data_providers import pluggin_factory
 import unicodedata
 from biowrapper.phylogeny import NewickTree
 from Bio.Phylo.NewickIO import NewickError
+from data_providers.cache import CacheController
 
 def index(request):
     context = {'input': constants.INPUT, 
@@ -23,7 +24,16 @@ def result(request):
         return data_source
     
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
-    data_pluggin.get_first_image(input_array)
+    cache = CacheController()
+    cachedSpecies, input_array = cache.tryCache(input_array, data_source)
+    data_pluggin.get_all_images(input_array)
+    
+    for k in data_pluggin.img_list.keys():
+        if(data_pluggin.img_list[k] == None):
+            del data_pluggin.img_list[k]
+    
+    cache.storeCache(data_pluggin.img_list, data_source)
+    data_pluggin.img_list.update(cachedSpecies)
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/result.html')
 
@@ -35,7 +45,15 @@ def pick_results(request):
     
     #I need to make parallel requests for every element in the input array with a data source
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
+    cache = CacheController()
+    cachedSpecies, input_array = cache.tryCache(input_array, data_source)
     data_pluggin.get_all_images(input_array)
+    
+    for k in data_pluggin.img_list.keys():
+        if(data_pluggin.img_list[k] == None):
+            del data_pluggin.img_list[k]
+    
+    cache.storeCache(data_pluggin.img_list, data_source)
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
     
@@ -91,9 +109,12 @@ def redirection(error_list, img_list, species_list, data_source, request, no_err
         return render(request, 'treegenerator/index.html', context)
     else:
         input_number = len(img_list)
+        img_results = []
         for i in range(input_number):
-            img_list[i] = (species_list[i], img_list[i])
+            img_results.append((species_list[i].replace(' ', '_'), img_list[species_list[i]]))
+
+        print img_results
             
-        context = {'result':        img_list,
+        context = {'result':        img_results,
                     'data':         data_source}
         return render(request, no_errors_page , context)
