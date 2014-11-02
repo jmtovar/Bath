@@ -1,4 +1,5 @@
 from data_providers import data_pluggin
+from data_providers.data_pluggin import GetImagesThread
 from utils import constants
 import urllib2
 import json
@@ -18,7 +19,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
         threadNumber = min(10, len(species))
 
         for i in range(threadNumber) :
-            t = GetImageThread(self.img_list, self.err_list, lock, queue, i)
+            t = PhylopicGetImageThread(self.img_list, self.err_list, lock, queue, i)
             t.setDaemon(True)
             t.start()
 
@@ -103,7 +104,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
                 self.img_list[index] = (species, species.replace(' ', '_'), img_list)
                 return
 
-class GetImageThread(threading.Thread):
+class PhylopicGetImageThread(GetImagesThread):
     """
     Thread model to process the species.
     """
@@ -116,12 +117,7 @@ class GetImageThread(threading.Thread):
         :param queue: Queue with the species to be processed.
         :param id: id of the thread in the thread group.
         """
-        threading.Thread.__init__(self)
-        self.images = images
-        self.errors = errors
-        self.lock = lock
-        self.queue = queue
-        self.id = id
+        super(PhylopicGetImageThread, self).__init__(images, errors, lock, queue, id)
 
     def get_species_uid(self, species):
         """ Gets the uid for the species from phylopic using the taxon search.

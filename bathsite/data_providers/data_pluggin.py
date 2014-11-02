@@ -23,3 +23,21 @@ class DataPluggin(object):
     def get_all_images_specific_implementation(self, species):
         #returns a list of all the urls for the species found in the source
         pass
+
+class GetImagesThread(threading.Thread):
+
+    def __init__(self, images, errors, lock, queue, id=0):
+        """
+        :param images: Dictionary for the species->urls.
+        :param errors: Dictionary for the species->errors.
+        :param lock: Lock to access the dictionaries in the threads.
+        :param queue: Queue with the species to be processed.
+        :param id: id of the thread in the thread group.
+        """
+        super(GetImagesThread, self).__init__()
+        self.images = images
+        self.errors = errors
+        self.lock = lock
+        self.queue = queue
+        self.id = id
+
