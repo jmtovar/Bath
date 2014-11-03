@@ -1,6 +1,7 @@
 INPUT = 'input'
 DATA_SOURCE = 'data_source'
 MAX_HTTP_TRY = 3
+MAX_THREAD = 10
 
 def get_parameters():
     '''

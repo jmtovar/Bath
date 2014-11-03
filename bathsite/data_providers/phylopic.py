@@ -7,6 +7,7 @@ import unicodedata
 import threading
 import Queue
 from urllib2 import URLError
+from utils import constants
 
 class PhylopicPluggin(data_pluggin.DataPluggin):
     def __init__(self):
@@ -16,7 +17,7 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
         #returns the url of the first image of the species found in the source
         lock = threading.Lock()
         queue = Queue.Queue()
-        threadNumber = min(10, len(species))
+        threadNumber = min(constants.MAX_THREAD, len(species))
 
         for i in range(threadNumber) :
             t = PhylopicGetImageThread(self.img_list, self.err_list, lock, queue, i)
