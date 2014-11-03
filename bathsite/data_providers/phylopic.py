@@ -105,19 +105,17 @@ class PhylopicPluggin(data_pluggin.DataPluggin):
                 return
 
 class PhylopicGetImageThread(GetImagesThread):
-    """
-    Thread model to process the species.
-    """
+    """ Thread model to process the species. """
 
-    def __init__(self, images, errors, lock, queue, id=0):
+    def __init__(self, images, errors, lock, queue, idThread=0):
         """
         :param images: Dictionary for the species->urls.
         :param errors: Dictionary for the species->errors.
         :param lock: Lock to access the dictionaries in the threads.
         :param queue: Queue with the species to be processed.
-        :param id: id of the thread in the thread group.
+        :param idThread: id of the thread in the thread group.
         """
-        super(PhylopicGetImageThread, self).__init__(images, errors, lock, queue, id)
+        super(PhylopicGetImageThread, self).__init__(images, errors, lock, queue, idThread)
 
     def get_species_uid(self, species):
         """ Gets the uid for the species from phylopic using the taxon search.
