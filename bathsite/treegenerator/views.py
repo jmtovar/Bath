@@ -51,16 +51,16 @@ def pick_results(request):
     return redirection(data_pluggin.err_list, data_pluggin.img_list, data_source, request, 'treegenerator/multiple_results.html')
     
 def argument_validation(request):
-    input = request.GET.get(constants.INPUT, '')
-    if input == '':
+    inputData = request.GET.get(constants.INPUT, '')
+    if inputData == '':
         return (None, HttpResponse('There was an error with your request. Go back to the index page and try again'))
     
     #change from unicode to ascii
-    input = unicodedata.normalize('NFKD', input).encode('ascii', 'ignore')
+    inputData = unicodedata.normalize('NFKD', inputData).encode('ascii', 'ignore')
     
     #Parses and should validate the tree. Will also have more functions if needed.
     try :
-        nTree = NewickTree(input)
+        nTree = NewickTree(inputData)
     except NewickError as e :
         return (None, HttpResponse("There is a problem with the structure of the Newick tree."))
     input_array = [name.strip().replace('_', ' ') for name in nTree.getSpeciesNames()]
