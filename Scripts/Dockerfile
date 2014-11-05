@@ -7,6 +7,7 @@ run apt-get install -y git wget
 run apt-get install -y python-setuptools python-numpy python-qt4 python-scipy python-mysqldb python-lxml python-matplotlib
 run apt-get install -y nginx supervisor
 run easy_install pip
+run easy_install -U ete2
 
 run pip install uwsgi
 
