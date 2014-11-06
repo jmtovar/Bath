@@ -7,6 +7,7 @@ import unicodedata
 from biowrapper.phylogeny import NewickTree
 from Bio.Phylo.NewickIO import NewickError
 from data_providers.cache import CacheController
+from ete2 import Tree, faces, TreeStyle
 
 def index(request):
     context = {'input': constants.INPUT, 
@@ -56,6 +57,13 @@ def pick_results(request):
     cache.storeCache(data_pluggin.img_list, data_source)
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
+
+def ete_prototype(request):
+    t = Tree( "((a,b),c);" )
+    circular_style = TreeStyle()
+    circular_style.mode = "c" # draw tree in circular mode
+    circular_style.scale = 20
+    t.render("mytree.png", w=183, units="mm", tree_style=circular_style)
     
 def argument_validation(request):
     input = request.GET.get(constants.INPUT, '')
