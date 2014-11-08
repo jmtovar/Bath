@@ -68,11 +68,11 @@ def ete_prototype(request):
     try:
         with open("mytree.png", "rb") as f:
             return HttpResponse(f.read(), mimetype="image/jpeg")
-        except IOError:
-            red = Image.new('RGBA', (1, 1), (255,0,0,0))
-            response = HttpResponse(mimetype="image/jpeg")
-            red.save(response, "JPEG")
-            return response
+    except IOError:
+        red = Image.new('RGBA', (1, 1), (255,0,0,0))
+        response = HttpResponse(mimetype="image/jpeg")
+        red.save(response, "JPEG")
+        return response
     
 def argument_validation(request):
     input = request.GET.get(constants.INPUT, '')
