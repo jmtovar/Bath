@@ -65,6 +65,8 @@ def ete_prototype(request):
     circular_style.scale = 20
     t.render("mytree.png", w=183, units="mm", tree_style=circular_style)
     
+    print 'Lalala'
+    
     try:
         with open("mytree.png", "rb") as f:
             return HttpResponse(f.read(), mimetype="image/jpeg")
@@ -72,6 +74,7 @@ def ete_prototype(request):
         red = Image.new('RGBA', (1, 1), (255,0,0,0))
         response = HttpResponse(mimetype="image/jpeg")
         red.save(response, "JPEG")
+        print 'IOError occurred'
         return response
     
 def argument_validation(request):
