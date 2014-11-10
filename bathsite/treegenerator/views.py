@@ -102,6 +102,10 @@ def argument_validation(request):
 def redirection(error_list, img_list, species_list, data_source, request, no_errors_page):
     errors_present = False
     
+    print 'Error list len: ' + len(error_list)
+    print 'Img list len: ' + len(img_list)
+    print 'Species list len: ' + len (species_list)
+    
     for species in  error_list.keys():
         if not error_list[species] is None :
             errors_present = True
