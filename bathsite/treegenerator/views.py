@@ -59,6 +59,7 @@ def pick_results(request):
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
 
 def ete_prototype(request):
+    print 'He llegado a ete_prototype'
     t = Tree( "((a,b),c);" )
     circular_style = TreeStyle()
     circular_style.mode = "c" # draw tree in circular mode
