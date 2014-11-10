@@ -62,9 +62,9 @@ def ete_prototype(request):
     print 'He llegado a ete_prototype'
     t = Tree( "((a,b),c);" );           print 'Paso 1'
     circular_style = TreeStyle();       print 'Paso 2'
-    circular_style.mode = "c"           print 'Paso 3' # draw tree in circular mode
-    circular_style.scale = 20           print 'Paso 4'
-    t.render("mytree.png", w=183, units="mm", tree_style=circular_style)    print 'Paso 5'
+    circular_style.mode = "c";          print 'Paso 3' # draw tree in circular mode
+    circular_style.scale = 20;          print 'Paso 4'
+    t.render("mytree.png", w=183, units="mm", tree_style=circular_style);   print 'Paso 5'
     
     print 'Lalala'
     
