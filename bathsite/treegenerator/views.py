@@ -64,17 +64,17 @@ def ete_prototype(request):
     circular_style = TreeStyle();       print 'Paso 2'
     circular_style.mode = "c";          print 'Paso 3' # draw tree in circular mode
     circular_style.scale = 20;          print 'Paso 4'
-    t.render("mytree.png", w=183, units="mm", tree_style=circular_style);   print 'Paso 5'
+    t.render("mytree.svg", w=183, units="mm", tree_style=circular_style);   print 'Paso 5'
     
     print 'Lalala'
     
     try:
-        with open("mytree.png", "rb") as f:
-            return HttpResponse(f.read(), mimetype="image/jpeg")
+        with open("mytree.svg", "rb") as f:
+            return HttpResponse(f.read(), mimetype="image/svg")
     except IOError:
         red = Image.new('RGBA', (1, 1), (255,0,0,0))
-        response = HttpResponse(mimetype="image/jpeg")
-        red.save(response, "JPEG")
+        response = HttpResponse(mimetype="image/svg")
+        red.save(response, "svg")
         print 'IOError occurred'
         return response
     
