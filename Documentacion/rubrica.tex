@@ -1,0 +1,253 @@
+\documentclass[10pt]{article}
+\usepackage{fontenc,amsmath,adjustbox}
+\usepackage[latin1]{inputenc}
+%\usepackage[spanish]{babel}
+
+\author{Javier Abdul Córdoba Gándara}
+\title{Sistemas Operativos II -- TC3043}
+
+\begin{document}
+\maketitle
+%\tableofcontents
+
+\section*{Rúbrica}
+
+\begin{adjustbox}{width=1.5\linewidth,center}
+
+ \begin{tabular}{|p{1in}|p{2in}|p{2in}|p{2in}|p{2in}||l|} \hline
+  Criterios 
+   & Ejemplar (5) 
+   & Satisfactorio (4-3) 
+   & Deficiente (2-1) 
+   & Inaceptable (0) 
+   & Peso  \\ \hline \hline
+
+  Sinopsis \& Descripción del problema.
+   & Describe con claridad la situación en la que el software resuelve un 
+    problema. Se describe el entorno en el que la aplicación es necesaria.
+   & Se muestra cómo es que se llegó a la idea en base a la identificación de un problema.
+   & Se narra la situación por la que se determinó materializar cierta idea.
+   & No se entiende el problema a solucionar.
+   & 1 \\ \hline
+
+  Especificación y calendario 
+   & Se enumeran con exactitud y secuencia lógica las 
+     actividades para cada uno de los (6) avances.
+   & Las actividades están enumeradas para cada uno de los (6) avances.
+   & Existe un listado de actividades pero no se detalla la secuencia o
+     segmentación de las tareas.
+   & No existe una programación de tareas.
+   & 2 \\ \hline
+
+  Conclusiones 
+   & Se incluye valoración específica de al menos 3 criterios aplicables al
+     conocimiento adquirido.
+   & Se valoran criterios de aprendizaje pero no es muy clara su distinción.
+   & Se enlistan lecciones aprendidas pero no se valoran.
+   & No se perciben juicios sobre las actividades realizadas.
+   & 1 \\ \hline
+
+  \multicolumn{5}{c}{Atributos funcionales:} \\ \hline
+
+  Arquitectura 
+   & Se detallan los componentes escogidos y su interrelación. 
+   & Se muestra un listado de los componentes del sistema.
+   & Se describe vagamente los componentes seleccionados.
+   & No existe una distinción entre componentes usados.
+   & 1 \\ \hline
+
+  Persistencia 
+   & Se juzgan diversas soluciones de persistencia y se demuestra la justificación
+     de la selección propuesta.
+   & Se describe la solución de persistencia y en general el modelo de datos.
+   & Se muestra el modelo de datos sin justificación.
+   & No se explica o no se describen datos a persistir.
+   & 1 \\ \hline
+
+  Ejecución \& Demo. 
+   & Se demuestra una solución sin errores y se describen pasos a seguir.
+   & Se demuestra una solución sin errores.
+   & La solución tiene algunos defectos 
+   & El demo no funciona.
+   & 1 \\ \hline
+
+  Pruebas (3 tipos) 
+   & Se distinguen los tipos de pruebas propuestas, se justifica su inclusión demostrando
+     su importancia estratégica.
+   & Existen pruebas automáticas, se obtiene alguna información de ellas.
+   & Existen pruebas automáticas, aunque no se describe su valoración.
+   & No hay pruebas automáticas. 
+   & 2\\ \hline
+
+  \multicolumn{5}{c}{Como Servicio Reactivo (2/3) :} \\ \hline
+  Responsivo 
+   & Se demuestran aspectos de usabilidad (en cuanto a tiempo de respuesta) y se describen 
+     las estrategias de recuperación de errores para mantener calidad de servicio aceptable.
+   & Se demuestra conocimiento de algunas características para mantener la usabilidad.
+   & La solución es usable como se presenta.
+   & La solución no es usable.
+   & 1\\ \hline
+
+  Resistente 
+   & La solución documenta al menos 3 estrategias para ser tolerante a fallos y los puntos
+     de control en donde se pueden detectar condiciones anormales.
+   & La solución documenta al menos 3 estrategias para ser tolerante a fallos.
+   & La solución documenta alguna estrategia de tolerancia a fallos.
+   & La solución no considera la tolerancia a fallos.
+   & 1\\ \hline
+
+  Elástico 
+   & El sistema contiene medidas predictivas y reactivas para variar la carga de trabajo
+     ya sea en condiciones de stress o de escaso uso.
+   & El sistema contiene medidas para adaptarse a la carga de trabajo.
+   & El sistema describe cómo crecer en caso de uso excesivo.
+   & El sistema no considera estrategias de elasticidad.
+   & 1\\ \hline
+
+  Conducido por mensajes 
+   & Existe alguna separación de mensajes asíncronos, capacidad de monitoreo y de 
+     respuesta en caso de variación de tráfico. Se justifica esta estrategia en un punto
+     que beneficie otros aspectos del sistema.
+   & Existe alguna separación de mensajes asíncronos, se documenta cómo funciona.
+   & Existe alguna separación de mensajes asíncronos.
+   & El flujo de la información es totalmente síncrona. 
+   & 1\\ \hline
+ \end{tabular}
+ \end{adjustbox}
+
+\begin{adjustbox}{width=1.5\linewidth,center}
+ \begin{tabular}{|p{1in}|p{2in}|p{2in}|p{2in}|p{2in}||l|} \hline
+  Criterios 
+   & Ejemplar (5) 
+   & Satisfactorio (4-3) 
+   & Deficiente (2-1) 
+   & Inaceptable (0) 
+   & Peso  \\ \hline \hline
+
+  \multicolumn{5}{c}{Atributos de {\em 12 Factor App} (7/9):} \\ \hline
+
+  Base de código 
+   & Se documenta algún estándar aplicado a la base de código. Se ejemplifica con un
+     repositorio y se detalla cómo se recomienda seguir el desarrollo y la liberación 
+     de artefactos.
+   & Se documenta algún estándar aplicado a la base de código y se ejemplifica con un
+     repositorio.
+   & Se documenta algún estándar aplicado a la base de código.
+   & No existe información sobre el manejo de la base de código. 
+   & 1\\ \hline
+
+  Manejo de dependencias 
+   & Se administran las dependencias a varios niveles y se muestra evidencia del despliegue 
+     de la aplicación en diversos ambientes.
+   & Se documentan las dependencias y la estrategia a seguir para administrarlas.
+   & Se enlistan las dependencias.
+   & No se describen las dependencias del proyecto.
+   & 1\\ \hline
+
+  Esquema de configuración 
+   & Toda la configuración es externa a la aplicación y se demuestran escenarios de uso donde
+     la configuración cambia sin tocar la base de código.
+   & Toda la configuración es externa a la aplicación.
+   & Existen algunas dependencias que requieren configuración manual.
+   & La configuración se hace manualmente.
+   & 1\\ \hline
+
+  Servicios de apoyo 
+   & Se documentan servicios de apoyo y se incluye documentación específica de su 
+     configuración, requisitos, etc.
+   & Se documentan servicios de apoyo pero no necesariamente se documenta el detalle.
+   & Se enlistan servicios de apoyo.
+   & No existe una sección sobre servicios externos al sistema.
+   & 1\\ \hline
+
+  Construye, libera, corre 
+   & Se documentan características especiales para los ambientes de desarrollo y producción.
+     La construcción depende de los cambios en la base de código en tiempo real.
+   & Se documentan características de los ambientes de manera teórica.
+   & Existen algunas dependencias al ambiente, pero la mayor parte es automático.
+   & Existen pasos manuales entre los distintos ambientes.
+   & 1\\ \hline
+
+  Modelo de procesos 
+   & Cada instancia de los componentes de la aplicación es totalmente independiente, puede 
+     conectarse y desconectarse del sistema.
+   & Los procesos son independientes pero de algún modo requieren un esquema de coordinación.
+   & Existe alguna diferenciación en cuanto al modelo de procesos pero se requiere más
+     trabajo para separar dependencias.
+   & No se documenta claramente un modelo de procesos.
+   & 1\\ \hline
+
+  Manejo de puertos 
+   & Existe una política clara en el manejo de puertos de tal modo que la aplicación
+     puede levantarse sin problemas (o dependencias) en distintos ambientes. Esto no depende
+     de la aplicación.
+   & La aplicación y sus componentes funcionan y se pueden levantar en varios puertos pero 
+     es una consecuencia de los componentes.
+   & La aplicación se puede levantar en varios puertos, pero depende de configuración interna.
+   & Existen problemas o no se probó modificar los puertos en la aplicación.
+   & 1\\ \hline
+  
+  Concurrencia 
+   & Existe un manejo explícito del modelo de procesos, enfocado a la escabilidad en favor
+     de la concurrencia. Existen pruebas para evidenciarlo.
+   & De algún modo se evidencía la configuración de herramientas que favorecen la concurrencia.
+   & El manejo de concurrencia es consecuencia de las herramientas ocupadas.
+   & No se documenta esta parte.
+   & 1\\ \hline
+
+  Descartable 
+   & Los procesos pueden desartarse ya sea por un error o a petición y la aplicación 
+     continúa estable. Se documenta qué partes de la aplicación tienen esta propiedad y
+     cómo se puede probar.
+   & Existe documentación que evidencía esta propiedad en algún componente del sistema.
+   & El que los procesos sean descartables es consecuencia al menos aparente de los
+     componentes.
+   & No se documenta nada al respecto.
+   & 1\\ \hline
+
+  Relación dev/prod
+   & Se ha documentado claramente cómo se pueden crear ambientes en los que la
+     aplicación funciona, de tal modo que la distinción dev/prod sea mínima. Existen
+     pruebas o automatización sobre este aspecto.
+   & Se ha documentado cómo se pueden crear ambientes en los que la
+     aplicación funciona.
+   & Se tiene una documentación de dependencias que aparentemente serviría para
+     cumplir con el requisito de minimizar diferencias entre dev/prod.
+   & No se ha analizado el instalar en distintos ambientes. 
+   & 1\\ \hline
+
+  Esquema de bitácoras 
+   & Se consideran las bitácoras como un artefacto principal de la aplicación.
+     Se pueden rastrear eventos o bien se considera alguna herramienta para poder 
+     explotarla.
+   & Se ha documentado de algún modo cómo se aprovecharían las bitácoras. 
+   & Existen bitácoras y se puede hacer un uso básico.
+   & Las bitácoras son las de las herramientas que se usaron.
+   & 1\\ \hline
+
+  Procesos administrativos 
+   & Existe alguna implementación equivalente a una consola administrativa desde
+     donde se pueden ejecutar tareas comunes de administración.
+   & Se documentan al menos 3 procesos administrativos basados en los servicios de apoyo,
+     se ejemplifica cómo se aplican para la aplicación presentada.
+   & Los procesos administrativos son solo los de los servicios de apoyo, pero no están
+     diferenciados de la aplicación que se presenta.
+   & No se identifican procesos administrativos.
+   & 1\\ \hline
+
+  \end{tabular}
+\end{adjustbox}
+
+
+\begin{itemize}
+ \item La calificación final será calculado según el grado de cumplimiento de la rúbrica.
+ \item Para evidenciar el cumplimiento de cada uno de los puntos propuestos se entregará
+  un documento (en \LaTeX para estandarizar) donde se describa la justificación o implementación.
+ \item En los puntos con (x/y) quiere decir que se esperan como mínimo {\em x} implementados y {\em y}
+  planeados.
+ \item Entrega final: 1 de diciembre.
+ \item Especificación aprobada: antes del 13 de octubre.
+\end{itemize}
+
+
+\end{document}
