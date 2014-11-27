@@ -96,11 +96,11 @@ Since people who will maintain the web application will most likely not be softw
 
 \section{Functional Attributes}
  \subsection{Architecture}
- Speaking in general terms, Bath is an MVC application that makes asynchronus web API calls and process the results to make customizable graphical representations of taxonomical trees. The solution is encapsulated in light representations of virtual machines. \\
+ In general terms, this is was designed as a \textit{MVC} application which makes asynchronous \textit{REST} \textit{API} calls and processes the results to make customizable graphical representations of phylogenetic trees. The solution is encapsulated in light representations of virtual machines.
  
  Going to the specifics:
  
-The development of the system makes use of Docker images, since all the dependencies are managed through it. The project was developed with Python web development framework Django and uses SQLite as a database manager. The architecture within the project is preaty straight forward. The only major configuration is which data source to use, both data sources need to be queried in different forms, this is done by objects that inherit from Data\_pluggin. Each of the specific implementations of data pluggins query a different data source, which makes them easily interchangable and managable.
+The development of the system makes use of Docker images, since all the dependencies are managed through it and it simplifies the deployment of the module. The project was developed with a Python web development framework \textit{Django} and uses \textit{SQLite} as the back-end database manager. The architecture of the project is straight forward and uses abstraction to simplify further extension. The only major configuration is which data source to use, both data sources need to be queried in \textit{API} specific ways, this is done by objects that inherit from Data\_plugin. Each of the specific implementations of data plugin query a different data source, which makes them easily interchangeable and manageable.
 
  \subsection{Persistance}
  
