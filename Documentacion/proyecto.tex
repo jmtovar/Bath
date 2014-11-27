@@ -27,15 +27,15 @@ Since people who will maintain the web application will most likely not be softw
   \subsubsection{Week 1}
   Work plan for the week:
    \begin{itemize}
-    \item Input data: There will be a page with a text area and a file input (for very big trees) allowing the user to input a Phylogenetic tree in Newick format.
-    \item Fetch species data from databases: Using the information from the user, there will be a data pluggin that will request the images from the http://phylopic.org/ site. The Newick tree structure won´t be parsed or verified at this moment. Species list can be obtained from the Newick string
+    \item Input data: There will be a page with a text area and a file input (for big trees) allowing the user to input a Phylogenetic tree in \textit{Newick} format
+    \item Fetch species data from databases: Using the information from the user, there will be a data plug-in which will request the images from the \href{http://www.phylopic.org}{\textit{Phylopic}} web site. The \textit{Newick} tree structure will not be parsed or verified at this moment. A species list can be obtained from the \textit{Newick} raw string
    \item Show users data fetched from databases: The program will only pick one image for every species the user provided as input and that will be shown in another view
-   \item Identify problems between the provided tree structure and the data in databases: If the species is not found due to spelling mistake or inexistance of the species, the user will be notified. The species will be used for the visual tree generation but will have no image.
+   \item Identify problems between the provided tree structure and the data in databases: If the species is not found due to spelling mistake or missing images for the species, the user will be notified. The species will be used for the visual tree generation but will have no image.
    \item Identify problems with images missing for all species: If there is no data for a species in the data source, it will let the user know
    \end{itemize}
-   Real work done in the week:
+   Real work done during the week:
    \begin{itemize}
-	   \item Input data: Specified above.
+	   \item Input data: Specified above
 	   \item Fetch species data from databases: Specified above, only with the addition of the Encyclopedia of Life connection also established
 	   \item Show users data fetched from databases: Specified above
 	   \item Identify problems with images missing for all species: Specified above
@@ -44,10 +44,10 @@ Since people who will maintain the web application will most likely not be softw
   \subsubsection{Week 2}
 	Work plan for the week:
 	\begin{itemize}
-		\item Data sources as general abstract class: Each data source should inherit from the same general abstract class so that they can be interchangable
-		\item Select databases: There must be UI elements to chose from differet databases and the back-end logic to query said databases.
+		\item Data sources as general abstract class: Each data source should inherit from the same general abstract class so that they can be interchangeable
+		\item Select databases: There must be UI elements to chose from different databases and the back-end logic to query said databases.
 	\end{itemize}
-	Real work fone in the week:
+	Real work done during the week:
 	\begin{itemize}
 		\item Data sources as general abstract class: Specified above
 		\item Request data sources for multiple images of the same species and let the user chose the ones she likes the most: Part of the work item "Allow user to select images" specified on week 4
@@ -57,41 +57,41 @@ Since people who will maintain the web application will most likely not be softw
 	\begin{itemize}
   		\item Show tree: Build tree with the default images found in the databases and show it to the user.
 	\end{itemize}
-	Real work done in the week:
+	Real work done during the week:
 	\begin{itemize}
 		\item Identify problems  between the provided tree structure and the data in databases: Specified in week 1
 		\item Cache results: Specified in week 5
-		\item Parallelization of queries: Not explicitly specified. Added to improve performance
+		\item Parallelisation of queries: Not explicitly specified. Added to improve performance
 	\end{itemize}
   \subsubsection{Week 4}
   	Work plan for the week
   	\begin{itemize}
   		\item Allow user to select images: Build tree with the images selected by the user
 	\end{itemize}
-	Real work done in the week:
+	Real work done during the week:
 	\begin{itemize}
-		\item Investigate how to use and integrate Docker in the project: There is a dependency, ete2 (the library used to consctruct the trees) which need a very specific configuration on a linux-based system. After investigating a seies of alternatives, the team decided to use Docker to manage those dependencies, and thus the technology was added to the solution
+		\item Investigate how to use and integrate Docker in the project: There is a dependency, \textit{ETE2} (the library used to build the trees) which need a very specific configuration on a linux-based system. After investigating a series of alternatives, the team decided to use Docker to manage those dependencies, and thus the technology was added to the solution
 	\end{itemize}
   \subsubsection{Week 5}
-  	Work plan done in the week:
+  	Work plan done during the week:
   	\begin{itemize}
   		\item Register queries: Use SQLite to register the requests to the server
   		\item Cache responses: Increase responsiveness of the application, using cache on the responses
 	\end{itemize}
-	Real work done in the week:
+	Real work done during the week:
 	\begin{itemize}
 		\item Docker image configuration: There were configuration requirements in the Docker image that needed be met to make the application work
-		\item Ete2 troubleshooting: Had a fair amount of trouble making ete2 work correctly, since it needed graphic services which were usually unavailable in linux server implementations
+		\item \textit{ETE2} troubleshooting: \textit{ETE2} required extensive work to make it function correctly, since it needed graphic services which were usually unavailable in linux headless server configurations
 	\end{itemize}
   \subsubsection{Week 6}
-  	Work plan done in the week
+  	Work plan done during the week
   	\begin{itemize}
   		\item Testing: Make regression, functional and failure tolerance testing
 	\end{itemize}
-	Real work done in the week:
+	Real work done during the week:
 	\begin{itemize}
 		\item Testing: Specified above
-		\item Documentation: Ahem...this document.
+		\item Documentation: This document
 	\end{itemize}
 
 \section{Functional Attributes}
