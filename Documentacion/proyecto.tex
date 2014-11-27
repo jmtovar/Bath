@@ -102,16 +102,16 @@ Since people who will maintain the web application will most likely not be softw
  
 The development of the system makes use of Docker images, since all the dependencies are managed through it and it simplifies the deployment of the module. The project was developed with a Python web development framework \textit{Django} and uses \textit{SQLite} as the back-end database manager. The architecture of the project is straight forward and uses abstraction to simplify further extension. The only major configuration is which data source to use, both data sources need to be queried in \textit{API} specific ways, this is done by objects that inherit from Data\_plugin. Each of the specific implementations of data plugin query a different data source, which makes them easily interchangeable and manageable.
 
- \subsection{Persistance}
+ \subsection{Persistence}
  
-For data persistance, the first question that comes to mind is "Relational or Non-relational?" In this particular instance we saw fit to use relational databases since the data we would be highly structured and we would need to scale vertically. Non-relational databases do not scale well horizontally.\\
+For data persistence, the first question that comes to mind is "Relational or Non-relational?" In this particular instance we saw fit to use relational databases since the data we would be highly structured and we would need to scale vertically. Non-relational databases do not scale well horizontally. The application requires all \textit{CRUD} operations, a relational database will offer the best performance considering the circumstances.
 
-For the first release of the project we will use SQLite for practicity purposes. It is an SQL database that comes along and integrated within Django. Most probably later on, the data will be migrated to another manager like MySQL, which has better support and documentation.\\
+For the first release of the project we will use \textit{SQLite} for practical purposes. It is a simple relational database which can be accessed with the standard Python libraries. But because we rely on \textit{Django} \textit{ORM}, this dependency can be easily switched to other relational database manager at a later stage. We use \textit{Django Model} as the abstraction layer to access the database.
 
-The data model used for this application is preatty straight forward. We save each request in a table register as an ID, the Newick representation of the requested tree, whether the request was a succes or a failure, data source selected and date made. Given the user only makes an input, it is easier to record said input this way, it doesn't need to be more normalized, since that would make the data model more complex, and insertions and queries more complicated,given the join operations implicated.
+The data model used for this application is straight forward. We save each request in a table register as a register containing a unique identifier, the \textit{Newick} representation of the requested tree (regardless the status of the request), data source selected and a timestamp. Given the user only makes an input, it is easier to record said input this way, it doesn't need to be more normalised.
  
  \subsection{Tests}
- Estrategia general de pruebas a implementar. N�tese que son pruebas automatizadas.
+ Estrategia general de pruebas a implementar. Notese que son pruebas automatizadas.
 
 \section{Characteristics as a Reactive Service}
  \subsection{Responsive}
