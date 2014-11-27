@@ -10,16 +10,18 @@
 \maketitle
 
 \section{Synopsis}
-It is common among biology specialists to use taxonomical trees to illustrate the evolutionary relations among different species. Yet, producing these visual elements is time consuming and usually implies simple repetitive task. If the users could spend less time drawing trees manually, they could spend more time on non-trivial tasks.\\
+It is common among biology specialists to use taxonomical trees to illustrate the evolutionary relations among different species. Yet, producing these visual elements is time consuming and usually implies simple repetitive task. If the users could spend less time drawing trees manually, they could spend more time on non-trivial tasks.
 
 The Bath Project aims to give a solution to this problem. It is a web application that receives a tree in \textit{Newick} and produces a graphical representation of the phylogenetic tree with illustrations (when available) for each taxon.
 
 \section{Specification and Schedule}
-To cover the need specified above, the easiest, more portable (from the user's perspective) and straight forward solution would be a web application that queries different data sources (such as Phylopic or Encyclopedia of Life) to get the images for the species requested.\\
+We intend to provide a solution for the user requirements by developing the prototype of a web application. The prototype was designed as a simple and portable solution to the problem. It will use bioinformatics libraries (\textit{biopython} and \textit{ETE2}) images available as resources in public databases (\textit{Phylopic} and \textit{Encyclopedia of Life}) to automate the process of generating phylogenetic trees.
 
-The solution would need to have a database to have persistent registers on the requests made to the service. To increase responsiveness the solution must implement result caching and multithreaded web api calls to the data sources. The user must be able to configure the tree and what data source will the application use as source for the images.\\
+In order to reduce the number of requests made to the public databases and to improve the responsiveness of the application we also include a small database to keep cache data. Because querying the public databases implies being subject to latency due to IO access and network speed we designed the core of the public database interface as a multi-threaded process. We also designed the interface with each database's \textit{API} as a data plug-in, so other databases can be easily included in future development.
 
-Since people who will maintain the web application will most likely not be software developers, the language used and frameworks most be something they already know, in this case Python and the code must be in an open repository. Also the project must be built in such a way as to make it as portable as possible and manage it's dependencies in an elegant an simple form. A wrapper for everything inside the project (from dependencies and libraries to the source code) would be highly desirable
+In order to produce the best possible results, the user must be able to configure the tree and what data source will the application use as source for the images. %TODO edit this paragraph
+
+Since people who will maintain the web application will most likely not be software developers, the language used and frameworks most be something they already know, in this case Python and the code must be in an open repository. Also the project must be built in such a way as to make it as portable as possible and manage it's dependencies in an elegant an simple form. A wrapper for everything inside the project (from dependencies and libraries to the source code) would be highly desirable. %TODO edit this paragraph
 
  \subsection{Schedule}
   \subsubsection{Week 1}
