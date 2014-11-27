@@ -111,34 +111,33 @@ For the first release of the project we will use \textit{SQLite} for practical p
 The data model used for this application is straight forward. We save each request in a table register as a register containing a unique identifier, the \textit{Newick} representation of the requested tree (regardless the status of the request), data source selected and a timestamp. Given the user only makes an input, it is easier to record said input this way, it doesn't need to be more normalised.
  
  \subsection{Tests}
- Estrategia general de pruebas a implementar. Notese que son pruebas automatizadas.
+ Estrategia general de pruebas a implementar. Notese que son pruebas automatizadas. %TODO fill
 
 \section{Characteristics as a Reactive Service}
  \subsection{Responsive}
- 	The main advantage in Bath's design is that it is just, what I would call, a request-response application. The user sends the tree in Newick format and chooses a data source and gets back an image. If at a point in time the application is oveloaded the user can just refresh it's requests and have another shot to have it processed.\\
+ 	The main advantage in the application's design is that it is a stateless request-response application. The user inputs the tree in \textit{Newick} format, chooses a data source and gets back an image. If at a point in time the application is unresponsive the user can just restart the request and have another opportunity to have it processed.
  	
- 	Having the user refresh its request is the last resource we would like to rely upon. Given the most expensive operation done is web API calls, we follow two strategies to make them less costly:\\
+ 	Having the user retrying a request will probably be the last resort. Given the most expensive processing operation is the \textit{REST} calls to the databases, we follow two strategies to make them less costly:
  	
  	\begin{itemize}
-  		\item Don't make them: We have implemented cache for the requests made to the application. If the request is cached we can build the response tree with the images found in the cache avoiding the web calls
-  		\item Make them parallelizable: Since each tree could involve anywhere from 5 to docens of calls, by parallelizing them the application becomes more responsive by potentially an order of magnitude or two.
+  		\item Reduce the number of requests: We have implemented cache for the requests made to the application. If the request is cached we can build the response tree with the images found in the cache avoiding the \textit{REST} calls
+  		\item Make parallel requests: Since each tree could involve a large number of calls, by doing them in parallel application becomes more responsive by potentially an order of magnitude or two
 	\end{itemize}
  	
  \subsection{Resilient}
- 	There are several errors that could happen in the application, I will describe three:\\
+ 	There are several errors that could happen during a request, I will describe the three main concerns we had while designing error handling:
  	
  	\begin{itemize}
-  		\item Incorrect Newick tree format: the user can send an incorrectly formated Newick tree which would result in an error when the image creation is requested. This is verified early on when the request reachs the server and if the tree is not correctly formated the user is notified.
-  		\item Web call failure: every web call is encapsuled with a try-catch block. If a web call fails 3 times, the user is notified the data source server might be down and to try again later on.
-  		\item JSON Serialization: every json serialization also has a try-catch associated with it. If the serialization fails the user will be reported to contact an administrator because the web response of the APIs changed. This error will obviously not go away if the user tries again later.
+  		\item Incorrect \textit{Newick} tree format: the user can send an incorrectly formatted \textit{Newick} tree which would result in an error when the image creation is requested. This is verified early on when the request reaches the server and if the tree is not correctly formatted the user is notified. We rely on \textit{Biopython} to check the validity of the threes submitted
+  		\item Errors during the database's \textit{API} calls: every web call is encapsulated with a try-catch block. If a web call fails 3 times, the user is notified the data source server might be down and to try again later on
+  		\item \textit{JSON} serialisation: every \textit{JSON} serialization is enclosed in a try-catch block. If the serialisation fails the user will be reported to contact an administrator because the web response of the \textit{API}s changed. This error will obviously not go away even if the user tries again later
 	\end{itemize}
- 	
  	
  \subsection{Elastic}
  
-This section is not implemented but given the idea that Docker can start up instances of the service, then a monitoring and scheduler layer could be placed on top of the instances to share the workload among the available instances. Through the logs emited by the docker images, the scheduler would be able to know which virtualized server is best to work on the newly come request.\\
+This section is not implemented but given the idea that Docker can start up instances of the service, then a monitoring and scheduler layer could be placed on top of the instances to share the workload among the available instances. Through the logs emitted by the docker images, the scheduler would be able to know which virtualised server is best to work on the newly come request.
 
-Given shortage of resources, fewer instances could be started, the scheduler would need to be inteligent enough to know when to drop a request instead of knocking down a virtualized server. Evidently, it is best to leave droping the request as a last resource. When this happens, the scheduler itself should log the details of the incident so the administrator of the service would know how much more scaling does the system need (easily done with cloud infrastructures).
+Given shortage of resources, fewer instances could be started, the scheduler would need to be intelligent enough to know when to drop a request instead of knocking down a virtualised server. Evidently, it is best to leave dropping the request as a last resource. When this happens, the scheduler itself should log the details of the incident so the administrator of the service would know how much more scaling does the system need (easily done with cloud infrastructures).
  
  \subsection{Message Driven}
  
