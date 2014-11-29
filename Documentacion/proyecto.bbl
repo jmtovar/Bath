@@ -1,0 +1,8 @@
+\begin{thebibliography}{1}
+
+\bibitem{DjangoTut}
+Writing your first django app, part 1.
+\newblock \url{https://docs.djangoproject.com/en/dev/intro/tutorial01/}.
+\newblock Visto: 2014-10-14.
+
+\end{thebibliography}

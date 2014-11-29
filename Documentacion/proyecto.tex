@@ -133,7 +133,7 @@ The data model used for this application is straight forward. We save each reque
   		\item \textit{JSON} serialisation: every \textit{JSON} serialization is enclosed in a try-catch block. If the serialisation fails the user will be reported to contact an administrator because the web response of the \textit{API}s changed. This error will obviously not go away even if the user tries again later
 	\end{itemize}
  	
- \subsection{Elastic} %TODO rewrite
+ \subsection{Elastic} %TODO rewrite %As part of the class's documentation I am allowed to declare what properties the project doesn't has yet, but could be implemented as a middle-term goal. After I have delivered my documentation, I will rewrite this to meet the project's documentation requirements
  
 This section is not implemented but given the idea that Docker can start up instances of the service, then a monitoring and scheduler layer could be placed on top of the instances to share the workload among the available instances. Through the logs emitted by the docker images, the scheduler would be able to know which virtual server is best to work on the new  request.
 
