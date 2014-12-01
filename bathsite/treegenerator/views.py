@@ -9,7 +9,7 @@ from Bio.Phylo.NewickIO import NewickError
 from data_providers.cache import CacheController
 import re
 import string
-'''from ete2 import Tree, faces, TreeStyle'''
+from ete2 import Tree, faces, TreeStyle
 
 def ping(request):
     return HttpResponse('pong')
@@ -74,7 +74,9 @@ def ete_prototype(request):
     circular_style.scale = 20
     t.render("mytree.pdf", w=183, units="mm", tree_style=circular_style)
     
-    try:
+    return HttpResponse("Image constructed")
+    
+    '''try:
         with open("mytree.pdf", "rb") as f:
             return HttpResponse(f.read(), mimetype="image/pdf")
     except IOError:
@@ -82,7 +84,7 @@ def ete_prototype(request):
         response = HttpResponse(mimetype="image/pdf")
         red.save(response, "pdf")
         print 'IOError occurred'
-        return response
+        return response'''
     
 def argument_validation(request):
     input = request.GET.get(constants.INPUT, '')
