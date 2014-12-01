@@ -141,19 +141,158 @@ Given shortage of resources, fewer instances could be started, the scheduler wou
  
  \subsection{Message Driven}
  
-\section{Atributos de {\em 12 Factor App}}
- \subsection{Base de c�digo}
- \subsection{Manejo de dependencias}
- \subsection{Esquema de configuraci�n}
- \subsection{Servicios de apoyo}
- \subsection{Construye, libera, corre}
- \subsection{Modelo de procesos}
- \subsection{Manejo de puertos}
- \subsection{Concurrencia}
- \subsection{Descartable}
- \subsection{Relaci�n dev/prod}
- \subsection{Esquema de bit�coras}
- \subsection{Procesos administrativos}
+ Not considered
+ 
+\section{Attributes from {\em 12 Factor App}}
+ \subsection{Code base}
+ 
+The code base is in:\\
+
+https://github.com/dasmesser/Bath\\
+
+This repository contains (at least) 2 branches: \textit{master} and \textit{developing}. The \textit{master} branch is inteded to contain only stable (though incomplete) versions of the application. As a last resort, where everything starts going wrong in the development process, you can always go back to the last commit in the \textit{master} branch and restart the last sprint. As for the \textit{developing} branch, it is used to store the unstable versions of the application.
+If there is a major implementation of a feature, it is recommended to use yet another branch forking from \textit{developing}, as happened with a branch called \textit{ete2Tests}.
+If the project starts to integrate more than 2 developers, it would be convenient each one of them has it's own branch forking from \textit{developmen}t or from a specific massive feature which has it's own branch. This way the programmer may work on her own untainted branch before merging it to the more public \textit{developing} branch or the feature branch.
+If the number of  programmers grows, it is also adviced to make a \textit{stagging} branch to 'between' the \textit{master} and \textit{developing} branches. So whenever a developing sprint is done and testing is due, the \textit{developing} branch can be merged to the \textit{stagging} branch and be tested. If tests are successful then it is merged to \textit{master} if they are not it is merged to \textit{developing} for bug fixing.
+ 
+ \subsection{Dependency Management}
+ 
+Given the libraries we use in the web application, we require a Linux-based environment for \textit{ete2} library, it was decided to use \textit{Docker} to manage dependencies. \textit{Docker} is a program to emulate light virtual machines, which can be easily discarted and recreated. \textit{Docker} provides the functionality to create \textit{Docker images} which are the instructions to reproduce the \textit{Docker} environment. 
+This allows to manage OS level dependencies and library dependencies. For an environment to run Bath it only needs the to have \textit{Docker} installed and the \textit{Docker image}. These images can be further modified and commited to the image repositories if necessary.
+To this point Jair Ramirez and Abdul Cordoba have been successful running Bath with Windows and Macintosh machines respectably.
+ 
+ \subsection{Configuration Schema}
+ 
+There are several configurations that can be managed by scripts when starting the application, where to make the git repository, what branch to pull and executehow to map the ports (done automatically by the docker image, but manually configurable).
+
+A command along the following lines would need to be implemented:\\
+
+sudo docker run -t -i -p 8000:8000 abdulcordoba/bath /bin/sh -c "cd home; git init; git pull https://github.com/dasmesser/Bath.git ete2Tests; cd bathsite; python manage.py runserver 0.0.0.0:8000"\\
+
+Here we can appreciate the -p para that maps the local machin's port 8000 to the \textit{Docker image's} 8000 port. Next, inside the argument passed to /bin/sh we find the folder being initialized as git repository is 'home' and that it is pulling from user dasmesser's repository called Bath, hosted in github, branch ete2Tests. When running \textit{Django}, it is configured to accept requests from any ip (not just the local one as with the default configuration), going to the 8000 port.
+
+All this configuration settings can be altered without changing the code base.
+ 
+ \subsection{Support Services}
+ 
+So far we can declare to use two supporting services to get the images for the species requested by the user, the \textit{Encyclopedia of Life API} (http://eol.org/api), and the \textit{Phylopic API} (http://phylopic.org/api). The use of both are explained here.
+
+\textbf{Encyclopedia of Life (EoL):} When the app receives the species to be searched for, the first thing to do is to look for the ID of the said species in EoL, achieved by calling \textit{REST API}:\\
+
+http://eol.org/api/search/1.0.json?q=[species]\&page=1\&exact=true\\
+
+Where [species] must be replaced by the name of the species the application is looking for. EoL specifies that if there are more than 30 matches, the results will be splitted in several pages, we are only interested in the first matches (we do not expect that many results to come back any way) , so we specify "pages=1" in the url. We also set the argument "exact" to true to only get the result that match perfectly with our query.
+
+For example, for the call:\\
+
+http://eol.org/api/search/1.0.json?q=Ursus\&page=1\&exact=true\\
+
+Corresponds the following json:\\\\
+\{\\
+  "totalResults": 1,\\
+  "startIndex": 1,\\
+  "itemsPerPage": 30,\\
+  "results": [\\
+    \{\\
+      "id": 14349,\\
+      "title": "Ursus",\\
+      "link": "http://eol.org/14349?action=overview\&controller=taxa",\\
+      "content": "Ursus Linnaeus, 1758; Ursus; Ursus Arctos Bruinosus; Ursus Arctos Ssp."\\
+    \}\\
+  ],\\
+  "first": "http://eol.org/api/search/Ursus.json?page=1",\\
+  "self": "http://eol.org/api/search/Ursus.json?page=1",\\
+  "last": "http://eol.org/api/search/Ursus.json?page=1"\\
+\}\\
+ 
+ On this instance we are interested in the dictionaries' 'id' fields inside the 'results' JSONArray. Those are the ids of the species the user is looking for. The following \textit{REST API} we call is:\\
+ 
+http://eol.org/api/pages/1.0/[species\_id].json?images=10\&videos=0\&\\
+sounds=0\&maps=0\&text=0\&iucn=false\&subjects=overview\&licenses=all\&\\
+details=false\&common\_names= \\
+ 
+Where [species\_id] is the id of the species (which is gotten from the previous step) The json for this call is considerably larger (although we specify we only want the images, a lot of data is also received). Yet on the json there is a JSONArray matched with the key "dataObjects", each index contains a dictionary with a key called "dataObjectVersionID" which is the ID for the image. EoL identifies each sound, map, video, image, etc. as a dataObject, thus it is needed to find the id for the specific data object we are looking for (done in this step), and then its url. This can be achieved through the \textit{REST API} call:\\
+
+http://eol.org/api/data\_objects/1.0/[object\_id].json\\
+
+Where [object\_id] is the idof the dataObject from the previous step. The resulting json is also a little lengthy, but it has an JSONArray mapped with the key "dataObjects" inside the first index (since we are only performing a query for one object\_id) contains the url of the image, mapped with the key 'mediaURL'
+
+Further documentation in \href{http://eol.org/api}{http://eol.org/api}
+
+\textbf{Phylopic:} The first \textit{REST API} needed to call has the purpose of knowing the id Phylopic gives to the species being queried. The url is:\\
+
+http://phylopic.org/api/a/name/search?text=[species]\&options=illustrated\\
+
+Where [species] is the name of the species whose id we need to find. The 'options' parameter indicates the caller is interested in knowing which results are illustrated and which are not. The json has an JSONArray mapped to the key "result", each index has an id for the species (it is not unusual in Phylopic for some species, such as the Homo-sapiens, to have multiple ids) and each id will declare if it is illustrated, the application searches for the ones that are. The application needs to get the images related to the newly found id:\\
+
+http://phylopic.org/api/a/name/[species\_id]/images?options=pngFiles\\
+
+Where [species\_id] is the id of the species the user is interested in. Inside the resulting JSONthere is a dictionary mapped to the key 'result', then there is JSONArray mapped to 'same' with only one index (because in the url we only requested the pngFiles for the id), inside that index there is an array with several dictionaries specifying the url for the image in different sizes.
+
+Further documentation in \href{http://phylopic.org/api/}{http://phylopic.org/api/}
+ 
+ \subsection{Develop, Release, Run}
+ 
+The main difference between the dev and prod environments is the server running the apps. Django is a development server and (according to it's documentation) should not be used in production environments. The script given in the "Configuration Schema" section can be used to run the server in development mode. 
+
+To make it run in a production environment it is recomended to use WSGI. The WSGI setting-up and configuration is easy. It is best summarized in this document:\\ \href{https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/uwsgi/}{https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/uwsgi/}\\
+
+The only modifications needed that differ from the tutorial would be:
+
+\begin{itemize}
+	\item chdir: would need to be configured to the root of te project
+	\item socket: assign to desired port
+	\item processes: adjust to CPU capacities of th machine
+	\item daemonize: point to a desired log directory inside the solution
+\end{itemize}
+ 
+ \subsection{Process Model}
+ 
+ Not considered
+ 
+ \subsection{Port Management}
+ 
+Given \textit{Docker} feature to map image ports to the local machine's port, port management becomes easy. Nontheless, one should be careful when assigning ports, it is adviced against overriding well-known ports, as 80, 25, 21, etc. that the local machine may be using for common services. Generally, depending on the other services the machine may be using, registered-ports are a good option to map the internal ports to, these ports range from numbers 1024 to 65535. 
+
+One must also be careful, since the default port for Django is 8000, while wsgi uses 49152. So if the user maps the image's port 8000 but starts up a wsgi service, external communications will not go through.
+ 
+ \subsection{Concurrency}
+ 
+ Not considered
+ 
+ \subsection{Disposable}
+ 
+This was not implemented as part of the current version of the project, yet as a stateless internet application, it would fit nicely. Probably the most effective solution would be the one described in the "Elastic" section, near the begining of the document. Said solution would include several instances of the \textit{Docker image} application running on the same machine, they would all be able to communicate to a scheduler which would receive the requests and forward them to the most under-loaded instance of the application at the time. 
+
+Given each instance is quickly disposed of and quick to set-up, the scheduler could be programmed to monitor the load on it and know when to shut down processes and when to start them again when they are more needed. To communicate different \textit{Docker images}, the following tutorial is recommended:\\
+
+https://docs.docker.com/userguide/dockerlinks/\\
+ 
+ \subsection{Dev/Prod Relationship}
+ 
+This was not implemented as part of the current version of the project. There are no tests about creating dev/prod environments, yet it can be done with the \textit{Docker image} initialization scripts in the "Configuration Schema" section and the "Develop, Release, Run" section. The largest and most significant change when creating a development or production environment are whether to use Django or WSGI as container for the application. 
+
+It will be noted as a work item for future developers to automatize the creation of these environments and test they run according to their specific requirements.
+ 
+ \subsection{Log schema}
+ 
+A Log schema is not implemented in the project's current version, yet it should be considered for future work. There are several places where logs would be useful:
+
+\begin{itemize}
+	\item On start: the log should contain when has the application started
+  	\item Errors: whenever something fails (access to the database, json parsing, \textit{REST API} calls, etc)
+  	\item Cache or Web: the system should record how many calls were retreived from the cache (thus being way faster) and how many had to be gotten from the web. This could help determine if the cache algorythm is useful or if it needs more space to work properly
+  	\item CPU and RAM usage: with the \textit{psutil} library for python (reference in Bibliography section), the developer can get such data and log it periodically during the day to know spikes in usage and device more effective strategies to meet demand.
+\end{itemize}
+ 	
+There are plenty of options for logging libraries, one of which is the logging module included in most python distributions. Here is a link to a tutorial:\\
+
+\href{https://docs.python.org/2.6/library/logging.html}{https://docs.python.org/2.6/library/logging.html}\\
+ 
+ \subsection{Administrative processes}
+ 
+ Not considered
+ 
 \section{Conclusions}
 There were several key learning items I could acquire with this project:\\
 
@@ -161,13 +300,15 @@ There were several key learning items I could acquire with this project:\\
 
 2) Dependency Management: In the "School World" where you program something once to be run once on the professor's computer whose specifications and dependencies installed are perfectly known, there is little need to do dependency management. Yet, on the Real World where you don't really know where will the code end up running, dependency management is critical. I started up using virtualenv to manage dependencies, yet at some point it was not enough and I had to use Docker to emulate a whole operating system. It was a learning experience I had not come in contact with and one that I ended up enjoying and appreciating a lot.\\
 
-3) Asynchronus web API calls: Web calls are expensive time-wise and in the meantime the processor doesn't do much, so the computer resources are wasted. To avoid that as much as possible it is imperative that a web application always uses asynchronus web API calls. In the past I had tried doing this in another project with C but failed. Multithreading and resource management is a critical skill to have, yet a difficult one to achive given the complex nature of multithreaded algorythms. Luckly I could witness the development of one such algorythm in python.\\
+3) Asynchronus textit{REST API} calls: Web calls are expensive time-wise and in the meantime the processor doesn't do much, so the computer resources are wasted. To avoid that as much as possible it is imperative that a web application always uses asynchronus \textit{REST API} calls. In the past I had tried doing this in another project with C but failed. Multithreading and resource management is a critical skill to have, yet a difficult one to achive given the complex nature of multithreaded algorythms. Luckly I could witness the development of one such algorythm in python.\\
 
-4) Python and LaTeX: Although no programmer can be expected to know every single programming language (there ought to be hundreds, or even thousands of them), every programmer should know a compiled language, a web development language, an interpreted language and so on. I hadn't had the experience of working with an interpreted language such as Python and I completely ignored such languages as LaTeX existed. It has been enriching experience working with them.\\
+4) Python and \textit{LaTeX}: Although no programmer can be expected to know every single programming language (there ought to be hundreds, or even thousands of them), every programmer should know a compiled language, a web development language, an interpreted language and so on. I hadn't had the experience of working with an interpreted language such as Python and I completely ignored such languages as \textit{LaTeX} existed. It has been enriching experience working with them.\\
 
 \section{Referencias}
  Usar bibtex. He aqu� por ejemplo c�mo hacer referencia al tutorial de Django ~\cite{DjangoTut}.
-
+http://pythonhosted.org/ete2/install/index.html
+https://pypi.python.org/pypi/psutil
+http://en.wikipedia.org/wiki/List\_of\_TCP\_and\_UDP\_port\_numbers
 \bibliography{proyecto}{}
 \bibliographystyle{plain}
 
