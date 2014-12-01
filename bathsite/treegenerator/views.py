@@ -7,7 +7,12 @@ import unicodedata
 from biowrapper.phylogeny import NewickTree
 from Bio.Phylo.NewickIO import NewickError
 from data_providers.cache import CacheController
-from ete2 import Tree, faces, TreeStyle
+import re
+import string
+'''from ete2 import Tree, faces, TreeStyle'''
+
+def ping(request):
+    return HttpResponse('pong')
 
 def index(request):
     context = {'input': constants.INPUT, 
@@ -19,6 +24,7 @@ def index(request):
     return render(request, 'treegenerator/index.html', context)
 
 def result(request):
+    print 'Request is in'
     (input_array, data_source) = argument_validation(request)
     
     if input_array == None:
@@ -26,7 +32,9 @@ def result(request):
     
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     cache = CacheController()
+    print 'Try cache'
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)
+    print 'Go to search'
     data_pluggin.get_all_images(input_array)
     
     for k in data_pluggin.img_list.keys():
@@ -60,13 +68,11 @@ def pick_results(request):
 
 def ete_prototype(request):
     print 'He llegado a ete_prototype'
-    t = Tree( "((a,b),c);" );           print 'Paso 1'
-    circular_style = TreeStyle();       print 'Paso 2'
-    circular_style.mode = "c";          print 'Paso 3' # draw tree in circular mode
-    circular_style.scale = 20;          print 'Paso 4'
-    t.render("mytree.pdf", w=183, units="mm", tree_style=circular_style);   print 'Paso 5'
-    
-    print 'Lalala'
+    t = Tree( "((a,b),c);" )
+    circular_style = TreeStyle()
+    circular_style.mode = "c"
+    circular_style.scale = 20
+    t.render("mytree.pdf", w=183, units="mm", tree_style=circular_style)
     
     try:
         with open("mytree.pdf", "rb") as f:
@@ -85,6 +91,17 @@ def argument_validation(request):
     
     #change from unicode to ascii
     input = unicodedata.normalize('NFKD', input).encode('ascii', 'ignore')
+    
+    #Replace any number of consecutive spaces with a single one
+    input = re.sub(r'\s+', ' ', input)
+    
+    input_length = len(input)
+    for s in range(input_length):
+        if(input[s] == ' '):
+            if not(s == 0) and not(s == input_length - 1):
+                if(input[s - 1] in string.letters) and (input[s + 1] in string.letters):
+                    return (None, HttpResponse("Your request seem to be missing a comma between taxa names or a '_' between a compound taxa name. Return to the index and check your query"))
+            
     
     #Parses and should validate the tree. Will also have more functions if needed.
     try :
