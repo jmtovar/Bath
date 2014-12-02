@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.test import Client
+from utils import constants
 
 class Tests(TestCase):
     def setUp(self):
@@ -53,7 +54,7 @@ class Tests(TestCase):
         #Invalid data source
         response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Not_A_Valid_Data_Source')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('pluggin you selected is not available/') != -1)
+        self.assertTrue(response.content.find('pluggin you selected is not available') != -1)
         
         #No Newick tree
         response = self.c.get('/result/?input=&data_source=Phylopic')

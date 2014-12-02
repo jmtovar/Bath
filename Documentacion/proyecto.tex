@@ -256,7 +256,15 @@ The only modifications needed that differ from the tutorial would be:
  
  \subsection{Process Model}
  
- Not considered
+There are several parts of the project that can be easily deattached and the project would continue working:
+
+\textbf{Database:} currently we are using an \textit{SQLite} implementation for data persistance, yet it is possible to replace this instance with another database manager such as \textit{MySQL}, given that \textit{MySQL} instance is correctly configured (the tables exists, the authentication doesn't block the connection, etc.).
+
+\textbf{Data Pluggins:} there are two data pluggins as of the creation of this document, one for Phylopic API and another for Encyclopedia of Life API. Yet any of these pluggins could be removed at runtime by removing the correct variable from the /bathsite/utils/constants.py file and the creation instruction in /bathsite/data_pluggins/pluggin_factory.py 
+
+\textbf{Templates and static pages:} given the fact that Django can recompile modified files even while it is running,  it is possible to edit those files on-the-go.
+ 
+ These kinds of hot-swaps in the project are highly unadvisable in a production environment, they should be tested throughly in a stagging environment before attempting them in production.
  
  \subsection{Port Management}
  
@@ -308,7 +316,7 @@ There were several key learning items I could acquire with this project:\\
 
 2) Dependency Management: In the "School World" where you program something once to be run once on the professor's computer whose specifications and dependencies installed are perfectly known, there is little need to do dependency management. Yet, on the Real World where you don't really know where will the code end up running, dependency management is critical. I started up using virtualenv to manage dependencies, yet at some point it was not enough and I had to use Docker to emulate a whole operating system. It was a learning experience I had not come in contact with and one that I ended up enjoying and appreciating a lot.\\
 
-3) Asynchronus textit{REST API} calls: Web calls are expensive time-wise and in the meantime the processor doesn't do much, so the computer resources are wasted. To avoid that as much as possible it is imperative that a web application always uses asynchronus \textit{REST API} calls. In the past I had tried doing this in another project with C but failed. Multithreading and resource management is a critical skill to have, yet a difficult one to achive given the complex nature of multithreaded algorythms. Luckly I could witness the development of one such algorythm in python.\\
+3) Asynchronus \textit{REST API} calls: Web calls are expensive time-wise and in the meantime the processor doesn't do much, so the computer resources are wasted. To avoid that as much as possible it is imperative that a web application always uses asynchronus \textit{REST API} calls. In the past I had tried doing this in another project with C but failed. Multithreading and resource management is a critical skill to have, yet a difficult one to achive given the complex nature of multithreaded algorythms. Luckly I could witness the development of one such algorythm in python.\\
 
 4) Python and \textit{LaTeX}: Although no programmer can be expected to know every single programming language (there ought to be hundreds, or even thousands of them), every programmer should know a compiled language, a web development language, an interpreted language and so on. I hadn't had the experience of working with an interpreted language such as Python and I completely ignored such languages as \textit{LaTeX} existed. It has been enriching experience working with them.\\
 

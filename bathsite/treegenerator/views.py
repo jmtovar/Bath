@@ -32,7 +32,7 @@ def result(request):
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     
     if data_pluggin == None:
-        return HttpResponse('The pluggin you selected is not available. Please select a valid pluggin')
+        return HttpResponse(constants.PLUGGIN_NOT_AVAILABLE)
     
     cache = CacheController()
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)
@@ -57,7 +57,7 @@ def pick_results(request):
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     
     if data_pluggin == None:
-        return HttpResponse('The pluggin you selected is not available. Please select a valid pluggin')
+        return HttpResponse(constants.PLUGGIN_NOT_AVAILABLE)
     
     cache = CacheController()
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)

@@ -1,8 +1,8 @@
-"""
+'''
 Parse the tree from the string and return a Tree object.
 :param treeString: String with the tree in Newick format.
 :return: Bio.Phylo.Newick.Tree object with the resulting tree.
-"""
+'''
 
 INPUT = 'input'
 DATA_SOURCE = 'data_source'
@@ -27,6 +27,13 @@ def get_data_pluggins():
     '''
     return [PHYLOPIC,
             ENCYCLOPEDIA_OF_LIFE]
+
+            
+PLUGGIN_NOT_AVAILABLE = 'The pluggin you selected is not available. Please select a valid pluggin'
+
+def get_input_validation_errors():
+    return []
+            
 
 NO_SPECIES_BY_PROVIDED_NAME = 'no_species_by_provided_name'
 NO_IMAGES_FOR_SPECIES = 'no_images_for_species'
