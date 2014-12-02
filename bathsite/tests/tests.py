@@ -60,7 +60,7 @@ class Tests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(response.content.find('was an error with your request') != -1)
     
-    def regresion_tests(self):
+    def regression_tests(self):
         #Phylopic single image regresion
         response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
         self.assertEqual(response.status_code, 200)

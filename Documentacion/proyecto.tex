@@ -111,7 +111,13 @@ For the first release of the project we will use \textit{SQLite} for practical p
 The data model used for this application is straight forward. We save each request in a table register as a register containing a unique identifier, the \textit{Newick} representation of the requested tree (regardless the status of the request), data source selected and a timestamp. Given the user only makes an input, it is easier to record said input this way, it doesn't need to be more normalised.
  
  \subsection{Tests}
- Estrategia general de pruebas a implementar. Notese que son pruebas automatizadas. %TODO fill
+The file /bathsite/tests/tests.py has 3 types of tests: ping, destructive and regression tests. Each one of them tests different things and have different objectives
+
+\textbf{Ping tests:} they test the availability the different views within the application. These tests just make sure the views' response is a \textit{HTTP status code} is 200. These are light-weight tests and should be the first group of tests run, since if these do not pass, it would be unlikelly for the others to pass and can also pinpoint the failling view.
+
+\textbf{Destructive tests:} they try to feed the application erroneous input to get the error message. These tests work on the application's input validation. Errors on these tests most likely do not threat the application, it would just mean that a small group of careless users could be getting errors in their responses.
+
+\textbf{Regression tests:} as the application grows it is of prime importance to make sure that new features don't brake previous ones. If any of these tests brake, it would mean there is a serious error, meaning a lot of users might be getting errors to their requests. When a version of the app doesn't pass these tests, that version cannot be put into the \textit{master} branch, and if the version is in \textit{stagging} (if such branch exists) it should go back into \textit{developing}
 
 \section{Characteristics as a Reactive Service}
  \subsection{Responsive}
