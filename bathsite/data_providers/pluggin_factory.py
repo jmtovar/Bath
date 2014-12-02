@@ -9,5 +9,5 @@ def get_data_pluggin(pluggin):
     elif pluggin == constants.ENCYCLOPEDIA_OF_LIFE:
         return encyclopedia_of_life.EncyclopediaOfLifePluggin()
     else:
-        raise Exception('Pluggin reqquest not supported');
+        return None
 	

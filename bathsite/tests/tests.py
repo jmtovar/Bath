@@ -52,8 +52,8 @@ class Tests(TestCase):
         
         #Invalid data source
         response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Not_A_Valid_Data_Source')
-        self.assertEqual(response.status_code, 500)
-        self.assertTrue(response.content.find('Exception at /result/') != -1)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.content.find('pluggin you selected is not available/') != -1)
         
         #No Newick tree
         response = self.c.get('/result/?input=&data_source=Phylopic')

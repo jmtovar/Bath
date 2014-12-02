@@ -30,6 +30,10 @@ def result(request):
         return data_source
     
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
+    
+    if data_pluggin == None:
+        return HttpResponse('The pluggin you selected is not available. Please select a valid pluggin')
+    
     cache = CacheController()
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)
     data_pluggin.get_all_images(input_array)
@@ -51,6 +55,10 @@ def pick_results(request):
     
     #I need to make parallel requests for every element in the input array with a data source
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
+    
+    if data_pluggin == None:
+        return HttpResponse('The pluggin you selected is not available. Please select a valid pluggin')
+    
     cache = CacheController()
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)
     data_pluggin.get_all_images(input_array)
