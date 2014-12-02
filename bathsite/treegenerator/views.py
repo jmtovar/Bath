@@ -9,7 +9,7 @@ from Bio.Phylo.NewickIO import NewickError
 from data_providers.cache import CacheController
 import re
 import string
-from ete2 import Tree, faces, TreeStyle
+'''from ete2 import Tree, faces, TreeStyle'''
 
 def ping(request):
     return HttpResponse('pong')
@@ -24,7 +24,6 @@ def index(request):
     return render(request, 'treegenerator/index.html', context)
 
 def result(request):
-    print 'Request is in'
     (input_array, data_source) = argument_validation(request)
     
     if input_array == None:
@@ -32,9 +31,7 @@ def result(request):
     
     data_pluggin = pluggin_factory.get_data_pluggin(data_source)
     cache = CacheController()
-    print 'Try cache'
     cachedSpecies, input_array = cache.tryCache(input_array, data_source)
-    print 'Go to search'
     data_pluggin.get_all_images(input_array)
     
     for k in data_pluggin.img_list.keys():
@@ -66,8 +63,7 @@ def pick_results(request):
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
 
-def ete_prototype(request):
-    print 'He llegado a ete_prototype'
+'''def ete_prototype(request):
     t = Tree( "((a,b),c);" )
     circular_style = TreeStyle()
     circular_style.mode = "c"
@@ -76,7 +72,7 @@ def ete_prototype(request):
     
     return HttpResponse("Image constructed")
     
-    '''try:
+    try:
         with open("mytree.pdf", "rb") as f:
             return HttpResponse(f.read(), mimetype="image/pdf")
     except IOError:
