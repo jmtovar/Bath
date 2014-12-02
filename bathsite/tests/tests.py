@@ -3,25 +3,57 @@ from django.test import Client
 
 class Tests(TestCase):
     def setUp(self):
-        c = Client()
+        self.c = Client()
 
     def ping_tests(self):
-        response = c.get('/ping/')
+        #Ping test
+        response = self.c.get('/ping/')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'pong')
+        
+        #Index
+        response = self.c.get('/')
+        self.assertEqual(response.status_code, 200)
+        
+        #Phylopic single image
+        response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
+        self.assertEqual(response.status_code, 200)
+        
+        #Phylopic multiple image
+        response = self.c.get('/multiple_results/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
+        self.assertEqual(response.status_code, 200)
+        
+        #EoL single image
+        response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Encyclopedia%20of%20life')
+        self.assertEqual(response.status_code, 200)
+        
+        #EoL multiple image
+        response = self.c.get('/multiple_results/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Encyclopedia%20of%20life')
+        self.assertEqual(response.status_code, 200)
         
     def destructive_test(self):
         #Homo sapiens separated by a space instead of a _
-        response = c.get('/result/?input=(((Walrus,%20Homo sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
+        response = self.c.get('/result/?input=(((Walrus,%20Homo sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
         
         #Incorrect Newick tree format
-        response = c.get('/result/?input=((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
+        response = self.c.get('/result/?input=((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
         
         #No data source selected
-        response = c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=')
+        response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=')
         
         #Invalid data source
-        response = c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Not_A_Valid_Data_Source')
+        response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Not_A_Valid_Data_Source')
         
         #No Newick tree
-        response = c.get('/result/?input=&data_source=Phylopic')
+        response = self.c.get('/result/?input=&data_source=Phylopic')
+    
+    def regresion_tests(self):
+        #Phylopic single image regresion
+        response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
+        print response.content
+        
+        
+        
+        
+        
+        
+        
