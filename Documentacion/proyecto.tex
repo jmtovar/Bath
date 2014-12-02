@@ -167,7 +167,9 @@ There are several configurations that can be managed by scripts when starting th
 
 A command along the following lines would need to be implemented:\\
 
-sudo docker run -t -i -p 8000:8000 abdulcordoba/bath /bin/sh -c "cd home; git init; git pull https://github.com/dasmesser/Bath.git ete2Tests; cd bathsite; python manage.py runserver 0.0.0.0:8000"\\
+sudo docker run -t -i -p 8000:8000 abdulcordoba/bath /bin/sh -c "Xvfb :0 \&
+export DISPLAY=:0; cd home; git init; git pull https://github.com/dasmesser
+/Bath.git ete2Tests; cd bathsite; python manage.py runserver 0.0.0.0:8000"\\
 
 Here we can appreciate the -p para that maps the local machin's port 8000 to the \textit{Docker image's} 8000 port. Next, inside the argument passed to /bin/sh we find the folder being initialized as git repository is 'home' and that it is pulling from user dasmesser's repository called Bath, hosted in github, branch ete2Tests. When running \textit{Django}, it is configured to accept requests from any ip (not just the local one as with the default configuration), going to the 8000 port.
 

@@ -9,7 +9,7 @@ from Bio.Phylo.NewickIO import NewickError
 from data_providers.cache import CacheController
 import re
 import string
-'''from ete2 import Tree, faces, TreeStyle'''
+from ete2 import Tree, faces, TreeStyle
 
 def ping(request):
     return HttpResponse('pong')
@@ -63,7 +63,7 @@ def pick_results(request):
     
     return redirection(data_pluggin.err_list, data_pluggin.img_list, input_array, data_source, request, 'treegenerator/multiple_results.html')
 
-'''def ete_prototype(request):
+def ete_prototype(request):
     t = Tree( "((a,b),c);" )
     circular_style = TreeStyle()
     circular_style.mode = "c"
@@ -72,7 +72,7 @@ def pick_results(request):
     
     return HttpResponse("Image constructed")
     
-    try:
+    '''try:
         with open("mytree.pdf", "rb") as f:
             return HttpResponse(f.read(), mimetype="image/pdf")
     except IOError:
