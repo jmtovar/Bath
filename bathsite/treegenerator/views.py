@@ -93,7 +93,7 @@ def ete_prototype(request):
 def argument_validation(request):
     input = request.GET.get(constants.INPUT, '')
     if input == '':
-        return (None, HttpResponse('There was an error with your request. Go back to the index page and try again'))
+        return (None, HttpResponse(constants.NO_NEWICK_TREE))
     
     #change from unicode to ascii
     input = unicodedata.normalize('NFKD', input).encode('ascii', 'ignore')
@@ -106,19 +106,19 @@ def argument_validation(request):
         if(input[s] == ' '):
             if not(s == 0) and not(s == input_length - 1):
                 if(input[s - 1] in string.letters) and (input[s + 1] in string.letters):
-                    return (None, HttpResponse("Your request seem to be missing a comma between taxa names or a '_' between a compound taxa name. Return to the index and check your query"))
+                    return (None, HttpResponse(constants.SEPARATED_BY_SPACE_ERROR))
             
     
     #Parses and should validate the tree. Will also have more functions if needed.
     try :
         nTree = NewickTree(input)
     except NewickError as e :
-        return (None, HttpResponse("There is a problem with the structure of the Newick tree."))
+        return (None, HttpResponse(constants.NEWICK_TREE_FORMAT_ERROR))
     input_array = [name.strip().replace('_', ' ') for name in nTree.getSpeciesNames()]
     
     data_source = request.GET.get(constants.DATA_SOURCE, '')
     if data_source == '':
-        return (None, HttpResponse('There was an error with your request. Go back to the index page and try again'))
+        return (None, HttpResponse(constants.NO_PLUGGIN_SELECTED))
     
     return (input_array, data_source)
     

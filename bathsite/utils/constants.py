@@ -30,6 +30,8 @@ def get_data_pluggins():
 
             
 PLUGGIN_NOT_AVAILABLE = 'The pluggin you selected is not available. Please select a valid pluggin'
+NO_NEWICK_TREE = 'No Newick Tree detected. Go back to the index page and try again'
+NO_PLUGGIN_SELECTED = 'No pluggin was selected. Please go back to the index page and try again'
 
 def get_input_validation_errors():
     return []

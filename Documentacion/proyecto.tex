@@ -260,7 +260,7 @@ There are several parts of the project that can be easily deattached and the pro
 
 \textbf{Database:} currently we are using an \textit{SQLite} implementation for data persistance, yet it is possible to replace this instance with another database manager such as \textit{MySQL}, given that \textit{MySQL} instance is correctly configured (the tables exists, the authentication doesn't block the connection, etc.).
 
-\textbf{Data Pluggins:} there are two data pluggins as of the creation of this document, one for Phylopic API and another for Encyclopedia of Life API. Yet any of these pluggins could be removed at runtime by removing the correct variable from the /bathsite/utils/constants.py file and the creation instruction in /bathsite/data_pluggins/pluggin_factory.py 
+\textbf{Data Pluggins:} there are two data pluggins as of the creation of this document, one for Phylopic API and another for Encyclopedia of Life API. Yet any of these pluggins could be removed at runtime by removing the correct variable from the /bathsite/utils/constants.py file and the creation instruction in /bathsite/data\_pluggins/pluggin\_factory.py 
 
 \textbf{Templates and static pages:} given the fact that Django can recompile modified files even while it is running,  it is possible to edit those files on-the-go.
  

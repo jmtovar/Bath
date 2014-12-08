@@ -39,27 +39,27 @@ class Tests(TestCase):
         #Homo sapiens separated by a space instead of a _
         response = self.c.get('/result/?input=(((Walrus,%20Homo sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('missing a comma between taxa names') != -1)
+        self.assertEqual(response.content, constants.SEPARATED_BY_SPACE_ERROR)
         
         #Incorrect Newick tree format
         response = self.c.get('/result/?input=((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Phylopic')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('structure of the Newick tree') != -1)
+        self.assertEqual(response.content, constants.NEWICK_TREE_FORMAT_ERROR)
         
         #No data source selected
         response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('was an error with your request') != -1)
+        self.assertEqual(response.content, constants.NO_PLUGGIN_SELECTED)
         
         #Invalid data source
         response = self.c.get('/result/?input=(((Walrus,%20Homo_sapiens)%20(Black_bear,%20Giant_panda)),%20(fox))&data_source=Not_A_Valid_Data_Source')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('pluggin you selected is not available') != -1)
+        self.assertEqual(response.content, constants.PLUGGIN_NOT_AVAILABLE)
         
         #No Newick tree
         response = self.c.get('/result/?input=&data_source=Phylopic')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(response.content.find('was an error with your request') != -1)
+        self.assertEqual(response.content, constants.NO_NEWICK_TREE)
     
     def regression_tests(self):
         #Phylopic single image regresion
